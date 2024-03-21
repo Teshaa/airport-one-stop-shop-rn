@@ -28,6 +28,7 @@ const LoginScreen = ({ navigation }) => {
   const handleLogin = async (values, { setFieldError }) => {
     setLoading(true);
     const response = await login(values);
+    console.log(response.data);
     setLoading(false);
     if (!response.ok) {
       if (response.problem === "CLIENT_ERROR") {
@@ -83,7 +84,7 @@ const LoginScreen = ({ navigation }) => {
               navigation.navigate(routes.REGISTER_SCREEN);
             }}
           >
-            <Text style={{ color: colors.medium }}>Sign up</Text>
+            <Text style={{ color: colors.primary }}>Sign up</Text>
           </TouchableOpacity>
         </View>
       </View>

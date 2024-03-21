@@ -19,12 +19,12 @@ const WelcomeScreen = ({ navigation }) => {
         <View style={{ width: "100%" }}>
           <AppButton
             title="Login"
-            backgroundColor={colors.medium}
+            // backgroundColor={colors.primary}
             onPress={() => navigation.navigate(routes.LOGIN_SCREEN)}
           />
           <AppButton
             title="Register"
-            backgroundColor={colors.medium}
+            // backgroundColor={colors}
             onPress={() => navigation.navigate(routes.REGISTER_SCREEN)}
           />
         </View>

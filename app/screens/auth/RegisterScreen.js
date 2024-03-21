@@ -102,7 +102,7 @@ const RegisterScreen = ({ navigation }) => {
               navigation.navigate(routes.LOGIN_SCREEN);
             }}
           >
-            <Text style={{ color: colors.medium }}>Login</Text>
+            <Text style={{ color: colors.primary }}>Login</Text>
           </TouchableOpacity>
         </View>
       </View>

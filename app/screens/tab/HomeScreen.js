@@ -14,6 +14,7 @@ import colors from "../../utils/colors";
 import ScrollableIconButtons from "../../components/button/ScrollableIconButtons";
 import routes from "../../navigation/routes";
 import Product from "../../components/product/Product";
+import Carousel from 'react-native-snap-carousel';
 
 const HomeScreen = ({ navigation }) => {
   const { getCategories, getProducts } = useShop();
@@ -85,6 +86,14 @@ const HomeScreen = ({ navigation }) => {
     handleFetch();
   }, []);
 
+  const _renderItem = ({item, index}) => {
+    return (
+        <View style={styles.slide}>
+            <Text style={styles.title}>{ item.title }</Text>
+        </View>
+    );
+  }
+
   return (
     <AppSafeArea>
       <View style={styles.headerontainer}>
@@ -129,6 +138,7 @@ const HomeScreen = ({ navigation }) => {
         }}
         disabled
       />
+     
       <View style={styles.header}>
         <Text style={styles.title}>Products</Text>
         <List.Icon icon="chevron-right" />
