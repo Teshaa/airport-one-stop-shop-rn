@@ -43,13 +43,13 @@ export const httpService = {
   put: apiClient.put,
 };
 export const useShop = () => {
-  const endPoint = "shop/";
+  const endPoint = "meals/";
   const getCategories = (params) =>
-    apiClient.get(`${endPoint}categories/`, params);
+    apiClient.get(`${endPoint}food-types/`, params);
   const getProducts = (params) => apiClient.get(endPoint, params);
   const getTags = (params) => apiClient.get(`${endPoint}tags/`, params);
   const postOrder = (token, data) =>
-    apiClient.post("orders/", data, { headers: {...getAuthHeader(token)} });
+    apiClient.post("orders/", data, { headers: { ...getAuthHeader(token) } });
   const getReviews = (params) => apiClient.get(`${endPoint}reviews/`, params);
   const addReview = (token, data) =>
     apiClient.post(`${endPoint}reviews/`, data, {
@@ -57,6 +57,29 @@ export const useShop = () => {
     });
   return {
     getProducts,
+    getCategories,
+    getTags,
+    postOrder,
+    getReviews,
+    addReview,
+  };
+};
+
+export const useAccomodation = () => {
+  const endPoint = "hotels/";
+  const getCategories = (params) =>
+    apiClient.get(`${endPoint}room-types/`, params);
+  const getRooms = (params) => apiClient.get(`${endPoint}rooms/`, params);
+  const getTags = (params) => apiClient.get(`${endPoint}tags/`, params);
+  const postOrder = (token, data) =>
+    apiClient.post("orders/", data, { headers: { ...getAuthHeader(token) } });
+  const getReviews = (params) => apiClient.get(`${endPoint}reviews/`, params);
+  const addReview = (token, data) =>
+    apiClient.post(`${endPoint}reviews/`, data, {
+      headers: getAuthHeader(token),
+    });
+  return {
+     getRooms,
     getCategories,
     getTags,
     postOrder,

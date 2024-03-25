@@ -14,11 +14,15 @@ import colors from "../../utils/colors";
 import ScrollableIconButtons from "../../components/button/ScrollableIconButtons";
 import routes from "../../navigation/routes";
 import Product from "../../components/product/Product";
-import Carousel from 'react-native-snap-carousel';
+import Carousel from "react-native-snap-carousel";
+import { services } from "../../utils/constants";
+import SearchBar from "../../components/input/SearchBar";
+import AccomodationCard from "../../components/accomodation/AccomodationCard";
+import Accomodations from "../../components/accomodation/Accomodations";
 
 const HomeScreen = ({ navigation }) => {
   const { getCategories, getProducts } = useShop();
-  const { products, setProducts, categories, setCategories } = useShopContext();
+  const { products, setProducts, setCategories } = useShopContext();
   const { user } = useUserContext();
   const { getUser } = useUser();
   const [loading, setLoading] = useState(false);
@@ -86,17 +90,17 @@ const HomeScreen = ({ navigation }) => {
     handleFetch();
   }, []);
 
-  const _renderItem = ({item, index}) => {
-    return (
-        <View style={styles.slide}>
-            <Text style={styles.title}>{ item.title }</Text>
-        </View>
-    );
-  }
-
   return (
     <AppSafeArea>
       <View style={styles.headerontainer}>
+        <IconButton
+          icon="menu"
+          // iconColor={colors.white}
+          onPress={() => {
+            navigation.navigate(routes.SEARCH_SCREEN);
+          }}
+          size={30}
+        />
         <TouchableOpacity
           onPress={() =>
             navigation.navigate(routes.USER_NAVIGATION, {
@@ -115,35 +119,33 @@ const HomeScreen = ({ navigation }) => {
             />
           )}
         </TouchableOpacity>
-        <IconButton
-          icon="magnify"
-          style={styles.searchButn}
-          iconColor={colors.white}
-          mode="outlined"
-          onPress={() => {
-            navigation.navigate(routes.SEARCH_SCREEN);
-          }}
-          size={30}
-        />
+      </View>
+      <Text variant="headlineLarge" style={{ padding: 10 }}>
+        Welcome {user?.username ?? ""} 👋
+      </Text>
+      <View style={{ padding: 10 }}>
+        <SearchBar />
       </View>
       <ScrollableIconButtons
-        title="Product Categories"
-        data={categories}
+        title="Services"
+        data={services}
         imageExtractor={({ image }) => image}
-        keyExtractor={({ url }) => url}
-        titleExtractor={({ name }) => name}
-        selectable={true}
+        keyExtractor={({ id }) => id}
+        titleExtractor={({ title }) => title}
+        selectable={false}
         onItemClicked={(item) => {
           console.log(item);
         }}
         disabled
       />
-     
+
       <View style={styles.header}>
         <Text style={styles.title}>Products</Text>
         <List.Icon icon="chevron-right" />
       </View>
-      <View style={styles.productsContainer}>
+
+      <Accomodations />
+      {/* <View style={styles.productsContainer}>
         <FlatList
           data={products}
           numColumns={2}
@@ -160,7 +162,7 @@ const HomeScreen = ({ navigation }) => {
           }}
           ListFooterComponent={() => (loading ? <ActivityIndicator /> : null)}
         />
-      </View>
+      </View> */}
     </AppSafeArea>
   );
 };

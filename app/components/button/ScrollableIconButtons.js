@@ -47,7 +47,7 @@ const ScrollableImageButtons = ({
             disable={disabled}
             style={styles.listItem}
             title={titleExtractor(type)}
-            image={{ uri: imageExtractor(type) }}
+            image={typeof imageExtractor(type) === "string" ? { uri: imageExtractor(type)}:imageExtractor(type) }
             onPress={() => {
               const index = data.indexOf(type);
               index === currentIndex && selectable

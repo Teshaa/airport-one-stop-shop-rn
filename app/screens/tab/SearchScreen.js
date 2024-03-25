@@ -233,7 +233,6 @@ const styles = StyleSheet.create({
   search: {
     backgroundColor: colors.white,
     flexDirection: "row",
-
     borderRadius: 10,
     flex: 1,
   },
