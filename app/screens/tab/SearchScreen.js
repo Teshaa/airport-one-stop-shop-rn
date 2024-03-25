@@ -12,7 +12,6 @@ import { Chip, IconButton, Text } from "react-native-paper";
 import { useShop } from "../../api/hooks";
 import ImageButton from "../../components/button/ImageButton";
 import Product from "../../components/product/Product";
-import MultiSlider from "@ptomasroos/react-native-multi-slider";
 import { useShopContext } from "../../context/hooks";
 
 const sliderWidth = Dimensions.get("window").width * 0.63;

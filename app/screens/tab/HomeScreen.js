@@ -14,11 +14,11 @@ import colors from "../../utils/colors";
 import ScrollableIconButtons from "../../components/button/ScrollableIconButtons";
 import routes from "../../navigation/routes";
 import Product from "../../components/product/Product";
-import Carousel from "react-native-snap-carousel";
 import { services } from "../../utils/constants";
 import SearchBar from "../../components/input/SearchBar";
 import AccomodationCard from "../../components/accomodation/AccomodationCard";
 import Accomodations from "../../components/accomodation/Accomodations";
+import FoodCategories from "../../components/eateries/FoodCategories";
 
 const HomeScreen = ({ navigation }) => {
   const { getCategories, getProducts } = useShop();
@@ -139,12 +139,10 @@ const HomeScreen = ({ navigation }) => {
         disabled
       />
 
-      <View style={styles.header}>
-        <Text style={styles.title}>Products</Text>
-        <List.Icon icon="chevron-right" />
-      </View>
-
       <Accomodations />
+      <View style={styles.productsContainer}>
+        <FoodCategories />
+      </View>
       {/* <View style={styles.productsContainer}>
         <FlatList
           data={products}
