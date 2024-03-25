@@ -35,10 +35,18 @@ const Accomodations = () => {
         showsHorizontalScrollIndicator={false}
         horizontal
         keyExtractor={({ id }) => id}
-        renderItem={({ item: { images, title, description }, index }) => (
+        renderItem={({
+          item: {
+            images,
+            number,
+            description,
+            hotel: { name },
+          },
+          index,
+        }) => (
           <View style={{ marginHorizontal: 10, width: 300 }}>
             <AccomodationCard
-              title={title}
+              title={`${name}-${number}`}
               description={description}
               rating={4}
               uri={images[0].image ?? "https://placehold.co/600x400"}

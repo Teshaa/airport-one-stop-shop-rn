@@ -47,7 +47,6 @@ export const useShop = () => {
   const getCategories = (params) =>
     apiClient.get(`${endPoint}food-types/`, params);
   const getProducts = (params) => apiClient.get(endPoint, params);
-  const getTags = (params) => apiClient.get(`${endPoint}tags/`, params);
   const postOrder = (token, data) =>
     apiClient.post("orders/", data, { headers: { ...getAuthHeader(token) } });
   const getReviews = (params) => apiClient.get(`${endPoint}reviews/`, params);
@@ -58,7 +57,6 @@ export const useShop = () => {
   return {
     getProducts,
     getCategories,
-    getTags,
     postOrder,
     getReviews,
     addReview,
@@ -67,6 +65,7 @@ export const useShop = () => {
 
 export const useAccomodation = () => {
   const endPoint = "hotels/";
+
   const getCategories = (params) =>
     apiClient.get(`${endPoint}room-types/`, params);
   const getRooms = (params) => apiClient.get(`${endPoint}rooms/`, params);
@@ -79,7 +78,7 @@ export const useAccomodation = () => {
       headers: getAuthHeader(token),
     });
   return {
-     getRooms,
+    getRooms,
     getCategories,
     getTags,
     postOrder,
