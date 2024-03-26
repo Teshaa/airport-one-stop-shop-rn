@@ -15,7 +15,7 @@ import ExpandableText from "../../components/display/ExpandableText";
 import { useCartContext } from "../../context/hooks";
 import routes from "../../navigation/routes";
 
-const ProductDetailScreen = ({ navigation, route }) => {
+const AccomodationDetail = ({ navigation, route }) => {
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCartContext();
   const {
@@ -43,18 +43,18 @@ const ProductDetailScreen = ({ navigation, route }) => {
             resizeMode="cover"
           />
           {/* <ScrollableThumbnails
-            uris={[...images.map(({ image: img }) => img), image]}
-            onPress={(uri) => setcurrHeroImage(uri)}
-          /> */}
-          {/* <ExpandableText
-            text={description}
-            threshHold={300}
-            title="Description"
-          /> */}
+              uris={[...images.map(({ image: img }) => img), image]}
+              onPress={(uri) => setcurrHeroImage(uri)}
+            /> */}
           <ExpandableText
             text={description}
             threshHold={300}
             title="Description"
+          />
+          <ExpandableText
+            text={additional_info}
+            threshHold={300}
+            title="Additional Infomation"
           />
         </Card>
       </ScrollView>
@@ -116,7 +116,7 @@ const ProductDetailScreen = ({ navigation, route }) => {
   );
 };
 
-export default ProductDetailScreen;
+export default AccomodationDetail;
 
 const styles = StyleSheet.create({
   screen: {

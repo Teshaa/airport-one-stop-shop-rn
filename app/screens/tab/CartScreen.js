@@ -39,7 +39,6 @@ const CartScreen = ({ navigation }) => {
   const { token } = useUserContext();
   const { postOrder } = useShop();
   const handleAddOrder = async () => {
-
     // return console.log(getPostItemsFormData());
     const response = await postOrder(token, postItems);
     if (!response.ok) {
@@ -71,8 +70,7 @@ const CartScreen = ({ navigation }) => {
                 tags,
                 images,
                 updated,
-                category: { name: category },
-                reviews: { count: reviews },
+                type: { name: category },
               },
             } = item;
             // console.log(item);
