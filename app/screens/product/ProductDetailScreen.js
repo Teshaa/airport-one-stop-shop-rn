@@ -26,10 +26,10 @@ const ProductDetailScreen = ({ navigation, route }) => {
     price,
     rating,
     tags,
-    images,
+    // images,
     updated,
-    category: { name: categry },
-    reviews: { count: reviews },
+    type: { name: categry },
+    // reviews: { count: reviews },
   } = route.params;
   const imageHeight = Dimensions.get("window").height * 0.4;
   const [currHeroImage, setcurrHeroImage] = useState(image);
@@ -42,10 +42,10 @@ const ProductDetailScreen = ({ navigation, route }) => {
             source={{ uri: currHeroImage }}
             resizeMode="cover"
           />
-          <ScrollableThumbnails
+          {/* <ScrollableThumbnails
             uris={[...images.map(({ image: img }) => img), image]}
             onPress={(uri) => setcurrHeroImage(uri)}
-          />
+          /> */}
           <ExpandableText
             text={description}
             threshHold={300}
@@ -80,7 +80,7 @@ const ProductDetailScreen = ({ navigation, route }) => {
             }
           >
             <RatingBar starSize={20} defaultRating={rating} disabled />
-            <Text variant="bodyMedium">({reviews} Reviews)</Text>
+            <Text variant="bodyMedium">({rating})</Text>
           </TouchableOpacity>
         </View>
         <View>

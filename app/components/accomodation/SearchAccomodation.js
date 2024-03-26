@@ -161,15 +161,21 @@ const SearchAccomodation = () => {
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 renderItem={({ item: { name, image } }) => (
-                  <ImageButton
-                    style={styles.chip}
-                    image={{ uri: image }}
-                    title={name}
-                    onPress={() => handleCategoryClicked(name)}
-                    activeBackgroundColor={colors.medium}
-                    activeTintColor={colors.white}
-                    active={name === activeCategory}
-                  />
+                  <Chip
+                    style={[
+                      styles.chip,
+                      name === activeCategory
+                        ? { backgroundColor: colors.light }
+                        : {},
+                    ]}
+                    selected={name === activeCategory}
+                    showSelectedOverlay
+                    onPress={() => {
+                      handleCategoryClicked(name);
+                    }}
+                  >
+                    {name}
+                  </Chip>
                 )}
               />
             </>
