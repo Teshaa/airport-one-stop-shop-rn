@@ -26,7 +26,7 @@ const AccomodationDetail = ({ navigation, route }) => {
     price,
     rating,
     tags,
-    // images,
+    images,
     updated,
     type: { name: categry },
     // reviews: { count: reviews },
@@ -42,10 +42,10 @@ const AccomodationDetail = ({ navigation, route }) => {
             source={{ uri: currHeroImage }}
             resizeMode="cover"
           />
-          {/* <ScrollableThumbnails
-              uris={[...images.map(({ image: img }) => img), image]}
-              onPress={(uri) => setcurrHeroImage(uri)}
-            /> */}
+          <ScrollableThumbnails
+            uris={[...images.map(({ image: img }) => img), image]}
+            onPress={(uri) => setcurrHeroImage(uri)}
+          />
           <ExpandableText
             text={description}
             threshHold={300}

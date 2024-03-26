@@ -15,11 +15,14 @@ import { useShopContext } from "../../context/hooks";
 import { useAccomodation, useShop } from "../../api/hooks";
 import moment from "moment/moment";
 import RatingBar from "../ratingbar/RatingBar";
+import { useNavigation } from "@react-navigation/native";
+import routes from "../../navigation/routes";
 
 const itemWidth = Dimensions.get("window").width / 2 - 10; // subtracting margin
 const itemHeight = Dimensions.get("window").height / 3 - 10; // subtracting margin
 
 const SearchAccomodation = () => {
+  const navigation = useNavigation();
   const { getRooms, getCategories, getTags } = useAccomodation();
   const [tags, setTags] = useState([]);
   const [rooms, setRooms] = useState([]);
@@ -211,8 +214,8 @@ const SearchAccomodation = () => {
           data={rooms}
           numColumns={2}
           keyExtractor={({ id }) => id}
-          renderItem={({
-            item: {
+          renderItem={({ item }) => {
+            const {
               number,
               description,
               images,
@@ -221,52 +224,53 @@ const SearchAccomodation = () => {
               updated_at,
               rating,
               price_per_night,
-            },
-          }) => (
-            <Card
-              onPress={() => {
-                // navigation.navigate(routes.PRODUCT_NAVIGATION, {
-                //   screen: routes.PRODUCT_SCREEN,
-                //   params: item,
-                // });
-              }}
-              style={[
-                {
-                  width: itemWidth,
-                  /*height: itemHeight,*/ margin: 5,
-                },
-              ]}
-            >
-              <Card.Content>
-                <Text variant="titleMedium">{`${name}-${number}`}</Text>
-                <Text variant="bodyMedium" style={{ color: colors.medium }}>
-                  {category}
-                </Text>
-              </Card.Content>
-              <Card.Cover
-                source={{
-                  uri: images[0].image ?? "https://placehold.co/600x400",
+            } = item;
+            return (
+              <Card
+                onPress={() => {
+                  navigation.navigate(routes.ACCOMODATION_SCREEN, {
+                    screen: routes.PRODUCT_SCREEN,
+                    params: item,
+                  });
                 }}
-                resizeMode="cover"
-              />
-              <Card.Actions>
-                <Text style={{ color: colors.medium }}>
-                  {`${moment(updated_at).format("Do MMM YYYY")} | `}
-                </Text>
-                <RatingBar starSize={15} defaultRating={rating} disabled />
-                <Text>({rating})</Text>
-              </Card.Actions>
-              <Card.Actions
-                style={{
-                  flexDirection: "row-reverse",
-                }}
+                style={[
+                  {
+                    width: itemWidth,
+                    /*height: itemHeight,*/ margin: 5,
+                  },
+                ]}
               >
-                <Text variant="bodyLarge" style={{ fontWeight: "bold" }}>
-                  Ksh. {price_per_night}
-                </Text>
-              </Card.Actions>
-            </Card>
-          )}
+                <Card.Content>
+                  <Text variant="titleMedium">{`${name}-${number}`}</Text>
+                  <Text variant="bodyMedium" style={{ color: colors.medium }}>
+                    {category}
+                  </Text>
+                </Card.Content>
+                <Card.Cover
+                  source={{
+                    uri: images[0].image ?? "https://placehold.co/600x400",
+                  }}
+                  resizeMode="cover"
+                />
+                <Card.Actions>
+                  <Text style={{ color: colors.medium }}>
+                    {`${moment(updated_at).format("Do MMM YYYY")} | `}
+                  </Text>
+                  <RatingBar starSize={15} defaultRating={rating} disabled />
+                  <Text>({rating})</Text>
+                </Card.Actions>
+                <Card.Actions
+                  style={{
+                    flexDirection: "row-reverse",
+                  }}
+                >
+                  <Text variant="bodyLarge" style={{ fontWeight: "bold" }}>
+                    Ksh. {price_per_night}
+                  </Text>
+                </Card.Actions>
+              </Card>
+            );
+          }}
           refreshing={refreshing}
           onRefresh={handlFetch}
         />
