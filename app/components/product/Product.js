@@ -21,8 +21,8 @@ const Product = ({ product: item }) => {
     tags,
     images,
     updated,
-    category: { name: categry },
-    reviews: { count: reviews },
+    type: { name: categry },
+    // reviews: { count: reviews },
   } = item;
   return (
     <Card
@@ -45,13 +45,13 @@ const Product = ({ product: item }) => {
           {categry}
         </Text>
       </Card.Content>
-      <Card.Cover source={{ uri: image }} resizeMode="contain" />
+      <Card.Cover source={{ uri: image }} resizeMode="cover" />
       <Card.Actions>
         <Text style={{ color: colors.medium }}>
           {`${moment(updated).format("Do MMM YYYY")} | `}
         </Text>
         <RatingBar starSize={15} defaultRating={rating} disabled />
-        <Text>({reviews})</Text>
+        <Text>({rating})</Text>
       </Card.Actions>
       <Card.Actions
         style={{

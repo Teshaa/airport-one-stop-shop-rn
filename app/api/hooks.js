@@ -67,7 +67,7 @@ export const useAccomodation = () => {
   const endPoint = "hotels/";
 
   const getCategories = (params) =>
-    apiClient.get(`${endPoint}room-types/`, params);
+    apiClient.get(`${endPoint}rooms-types/`, params);
   const getRooms = (params) => apiClient.get(`${endPoint}rooms/`, params);
   const getTags = (params) => apiClient.get(`${endPoint}tags/`, params);
   const postOrder = (token, data) =>

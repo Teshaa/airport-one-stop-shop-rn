@@ -1,4 +1,10 @@
-import { StyleSheet, View, TextInput, FlatList  } from "react-native";
+import {
+  StyleSheet,
+  View,
+  TextInput,
+  FlatList,
+  Dimensions,
+} from "react-native";
 import React, { useState, useEffect } from "react";
 import colors from "../../utils/colors";
 import { Chip, IconButton, Text } from "react-native-paper";
@@ -13,15 +19,17 @@ const SearchMeals = () => {
   const [tags, setTags] = useState([]);
   const { products, setProducts, categories, setCategories } = useShopContext();
   const [activeChips, setActiveChips] = useState([]);
-  const [activeCategory, setActiveCtegory] = useState();
+  const [activeCategory, setActiveCtegory] = useState([]);
   const [searchString, setSearchString] = useState();
   const [priceRange, setPriceRange] = useState([4000, 300000]);
   const [showSliderOverlay, setShowSliderOverlay] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const [openFilteres, setOpenFilders] = useState(false);
 
   const fetchProducts = async () => {
     const productsResponse = await getProducts({
       tags: activeChips.join(","),
-      category: activeCategory,
+      type: activeCategory,
       search: searchString,
       price_min: priceRange ? priceRange[0] : null,
       price_max: priceRange ? priceRange[1] : null,
@@ -51,7 +59,9 @@ const SearchMeals = () => {
     }
     setTags(tagsResponse.data.results);
     setCategories(categoryResponse.data.results);
+    setRefreshing(true);
     await fetchProducts();
+    setRefreshing(false);
   };
 
   const handleTagClick = (tag) => {
@@ -66,7 +76,6 @@ const SearchMeals = () => {
   };
 
   const handleCategoryClicked = (category) => {
-    /*
     const index = activeCategory.indexOf(category);
     if (index === -1) {
       setActiveCtegory([...activeCategory, category]);
@@ -74,7 +83,7 @@ const SearchMeals = () => {
       const cats = [...activeCategory];
       cats.pop(index);
       setActiveCtegory(cats);
-    }*/
+    }
     if (activeCategory === category) setActiveCtegory(null);
     else setActiveCtegory(category);
   };
@@ -87,7 +96,7 @@ const SearchMeals = () => {
     fetchProducts();
   }, [activeChips, activeCategory, searchString, priceRange]);
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <View style={styles.header}>
         <View style={styles.search}>
           <TextInput
@@ -103,6 +112,7 @@ const SearchMeals = () => {
           />
         </View>
         <IconButton
+          onPress={() => setOpenFilders(!openFilteres)}
           style={styles.filterButton}
           icon="filter"
           mode="outlined"
@@ -110,90 +120,94 @@ const SearchMeals = () => {
           size={27}
         />
       </View>
-      <View style={styles.filters}>
-        {tags.length > 0 && (
-          <>
-            <Text style={styles.headers}>Tags</Text>
-            <FlatList
-              data={tags}
-              keyExtractor={({ name }) => name}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              renderItem={({ item: { name } }) => (
-                <Chip
-                  style={[
-                    styles.chip,
-                    activeChips.indexOf(name) !== -1
-                      ? { backgroundColor: colors.light }
-                      : {},
-                  ]}
-                  selected={activeChips.indexOf(name) !== -1}
-                  showSelectedOverlay
-                  onPress={() => {
-                    handleTagClick(name);
-                  }}
-                >
-                  {name}
-                </Chip>
-              )}
+      {openFilteres && (
+        <View style={styles.filters}>
+          {tags.length > 0 && (
+            <>
+              <Text style={styles.headers}>Tags</Text>
+              <FlatList
+                data={tags}
+                keyExtractor={({ name }) => name}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                renderItem={({ item: { name } }) => (
+                  <Chip
+                    style={[
+                      styles.chip,
+                      activeChips.indexOf(name) !== -1
+                        ? { backgroundColor: colors.light }
+                        : {},
+                    ]}
+                    selected={activeChips.indexOf(name) !== -1}
+                    showSelectedOverlay
+                    onPress={() => {
+                      handleTagClick(name);
+                    }}
+                  >
+                    {name}
+                  </Chip>
+                )}
+              />
+            </>
+          )}
+          {categories.length > 0 && (
+            <>
+              <Text style={styles.headers}>Product categories</Text>
+              <FlatList
+                data={categories}
+                keyExtractor={({ url }) => url}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                renderItem={({ item: { name, image } }) => (
+                  <ImageButton
+                    style={styles.chip}
+                    image={{ uri: image }}
+                    title={name}
+                    onPress={() => handleCategoryClicked(name)}
+                    activeBackgroundColor={colors.medium}
+                    activeTintColor={colors.white}
+                    active={name === activeCategory}
+                  />
+                )}
+              />
+            </>
+          )}
+          <Text style={styles.headers}>Price Range in Ksh</Text>
+          <View style={styles.sliderContainer}>
+            <Text variant="bodyLarge" style={styles.prices}>
+              {priceRange[0]}
+            </Text>
+            <MultiSlider
+              style={styles.slide}
+              sliderLength={Dimensions.get("screen").width * 0.63}
+              max={1000000}
+              min={0}
+              values={priceRange}
+              onValuesChangeStart={() => setShowSliderOverlay(true)}
+              step={100}
+              enableLabel={showSliderOverlay}
+              containerStyle={{ paddingHorizontal: 10 }}
+              onValuesChangeFinish={(values) => {
+                setPriceRange(values);
+                setShowSliderOverlay(false);
+              }}
             />
-          </>
-        )}
-        {categories.length > 0 && (
-          <>
-            <Text style={styles.headers}>Product categories</Text>
-            <FlatList
-              data={categories}
-              keyExtractor={({ url }) => url}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              renderItem={({ item: { name, image } }) => (
-                <ImageButton
-                  style={styles.chip}
-                  image={{ uri: image }}
-                  title={name}
-                  onPress={() => handleCategoryClicked(name)}
-                  activeBackgroundColor={colors.medium}
-                  activeTintColor={colors.white}
-                  active={name === activeCategory}
-                />
-              )}
-            />
-          </>
-        )}
-        <Text style={styles.headers}>Price Range in Ksh</Text>
-        <View style={styles.sliderContainer}>
-          <Text variant="bodyLarge" style={styles.prices}>
-            {priceRange[0]}
-          </Text>
-          <MultiSlider
-            style={styles.slide}
-            sliderLength={sliderWidth}
-            max={1000000}
-            min={0}
-            values={priceRange}
-            onValuesChangeStart={() => setShowSliderOverlay(true)}
-            step={100}
-            enableLabel={showSliderOverlay}
-            containerStyle={{ paddingHorizontal: 10 }}
-            onValuesChangeFinish={(values) => {
-              setPriceRange(values);
-              setShowSliderOverlay(false);
-            }}
-          />
-          <Text variant="bodyLarge" style={styles.prices}>
-            {priceRange[1]}
-          </Text>
+            <Text variant="bodyLarge" style={styles.prices}>
+              {priceRange[1]}
+            </Text>
+          </View>
         </View>
-      </View>
-      {/* <View style={{ flex: 1 }}>
+      )}
+      <View style={{ flex: 1 }}>
         <FlatList
           data={products}
           numColumns={2}
-          keyExtractor={({ url }) => url}
+          keyExtractor={({ id }) => id}
           renderItem={({ item }) => <Product product={item} />}
+          refreshing={refreshing}
+          onRefresh={handlFetch}
         />
-      </View> */}
+      </View>
     </View>
   );
 };

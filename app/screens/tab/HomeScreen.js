@@ -143,24 +143,6 @@ const HomeScreen = ({ navigation }) => {
       <View style={styles.productsContainer}>
         <FoodCategories />
       </View>
-      {/* <View style={styles.productsContainer}>
-        <FlatList
-          data={products}
-          numColumns={2}
-          keyExtractor={({ url }) => url}
-          onEndReached={handlePagination}
-          onEndReachedThreshold={0.5}
-          refreshing={refreshing}
-          onRefresh={handleFetch}
-          contentContainerStyle={{
-            alignItems: "center",
-          }}
-          renderItem={({ item }) => {
-            return <Product product={item} />;
-          }}
-          ListFooterComponent={() => (loading ? <ActivityIndicator /> : null)}
-        />
-      </View> */}
     </AppSafeArea>
   );
 };
