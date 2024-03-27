@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
-import { Button, Card, Text } from "react-native-paper";
+import { Button, Card, List, Text } from "react-native-paper";
 import colors from "../../utils/colors";
 import RatingBar from "../../components/ratingbar/RatingBar";
 import Quantorsizer from "../../components/input/Quantorsizer";
@@ -23,6 +23,8 @@ const ProductDetailScreen = ({ navigation, route }) => {
     description,
     price,
     rating,
+    preparation_time,
+    readily_available,
     type: { name: categry },
   } = route.params;
   const imageHeight = Dimensions.get("window").height * 0.4;
@@ -36,6 +38,7 @@ const ProductDetailScreen = ({ navigation, route }) => {
             source={{ uri: currHeroImage }}
             resizeMode="cover"
           />
+
           {/* <ScrollableThumbnails
             uris={[...images.map(({ image: img }) => img), image]}
             onPress={(uri) => setcurrHeroImage(uri)}
@@ -45,6 +48,15 @@ const ProductDetailScreen = ({ navigation, route }) => {
             threshHold={300}
             title="Description"
           /> */}
+          <List.Item
+            title={"Prepairation time"}
+            left={(props) => <List.Icon {...props} icon={"timeline-clock"} />}
+            description={
+              readily_available
+                ? "ReadilyAvailable"
+                : `${preparation_time} minutes`
+            }
+          />
           <ExpandableText
             text={description}
             threshHold={300}
