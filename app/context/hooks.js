@@ -37,7 +37,9 @@ export const useCartContext = () => {
   const getTotalCost = () => {
     const cost = cartItems.reduce(
       (total, item) =>
-        total + parseFloat(item.product.price) * parseFloat(item.quantity),
+        total +
+        parseFloat(item.product.price ?? item.product.price_per_night) *
+          parseFloat(item.quantity),
       0
     );
     return cost;

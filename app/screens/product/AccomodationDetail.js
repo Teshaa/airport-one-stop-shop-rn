@@ -23,16 +23,18 @@ const AccomodationDetail = ({ navigation, route }) => {
     image,
     description,
     additional_info,
-    price,
+    price_per_night: price,
     rating,
     tags,
     images,
-    updated,
+    updated_at,
     type: { name: categry },
     // reviews: { count: reviews },
   } = route.params;
   const imageHeight = Dimensions.get("window").height * 0.4;
-  const [currHeroImage, setcurrHeroImage] = useState(image);
+  const [currHeroImage, setcurrHeroImage] = useState(
+    images[0].image ?? "https://placehold.co/600x400"
+  );
   return (
     <View style={styles.screen}>
       <ScrollView>
@@ -43,18 +45,13 @@ const AccomodationDetail = ({ navigation, route }) => {
             resizeMode="cover"
           />
           <ScrollableThumbnails
-            uris={[...images.map(({ image: img }) => img), image]}
+            uris={[...images.map(({ image: img }) => img)]}
             onPress={(uri) => setcurrHeroImage(uri)}
           />
           <ExpandableText
             text={description}
             threshHold={300}
             title="Description"
-          />
-          <ExpandableText
-            text={additional_info}
-            threshHold={300}
-            title="Additional Infomation"
           />
         </Card>
       </ScrollView>
@@ -102,7 +99,10 @@ const AccomodationDetail = ({ navigation, route }) => {
                 icon="cart"
                 textColor={colors.primary}
                 onPress={() => {
-                  addToCart({ product: route.params, quantity });
+                  addToCart({
+                    product: { ...route.params, productType: "accomodation" },
+                    quantity,
+                  });
                   navigation.goBack();
                 }}
               >

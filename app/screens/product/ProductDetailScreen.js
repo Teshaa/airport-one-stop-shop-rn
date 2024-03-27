@@ -6,8 +6,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
-import { Avatar, Button, Card, IconButton, Text } from "react-native-paper";
-import ScrollableThumbnails from "../../components/ScrollableThumbnails";
+import { Button, Card, Text } from "react-native-paper";
 import colors from "../../utils/colors";
 import RatingBar from "../../components/ratingbar/RatingBar";
 import Quantorsizer from "../../components/input/Quantorsizer";
@@ -22,14 +21,9 @@ const ProductDetailScreen = ({ navigation, route }) => {
     name,
     image,
     description,
-    additional_info,
     price,
     rating,
-    tags,
-    // images,
-    updated,
     type: { name: categry },
-    // reviews: { count: reviews },
   } = route.params;
   const imageHeight = Dimensions.get("window").height * 0.4;
   const [currHeroImage, setcurrHeroImage] = useState(image);
@@ -102,7 +96,10 @@ const ProductDetailScreen = ({ navigation, route }) => {
                 icon="cart"
                 textColor={colors.primary}
                 onPress={() => {
-                  addToCart({ product: route.params, quantity });
+                  addToCart({
+                    product: { ...route.params, productType: "meal" },
+                    quantity,
+                  });
                   navigation.goBack();
                 }}
               >

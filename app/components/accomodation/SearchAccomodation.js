@@ -8,11 +8,8 @@ import {
 import React, { useState, useEffect } from "react";
 import colors from "../../utils/colors";
 import { Card, Chip, IconButton, Text } from "react-native-paper";
-import ImageButton from "../../components/button/ImageButton";
-import Product from "../../components/product/Product";
 import MultiSlider from "@ptomasroos/react-native-multi-slider";
-import { useShopContext } from "../../context/hooks";
-import { useAccomodation, useShop } from "../../api/hooks";
+import { useAccomodation } from "../../api/hooks";
 import moment from "moment/moment";
 import RatingBar from "../ratingbar/RatingBar";
 import { useNavigation } from "@react-navigation/native";
@@ -228,8 +225,8 @@ const SearchAccomodation = () => {
             return (
               <Card
                 onPress={() => {
-                  navigation.navigate(routes.ACCOMODATION_SCREEN, {
-                    screen: routes.PRODUCT_SCREEN,
+                  navigation.navigate(routes.PRODUCT_NAVIGATION, {
+                    screen: routes.ACCOMODATION_SCREEN,
                     params: item,
                   });
                 }}

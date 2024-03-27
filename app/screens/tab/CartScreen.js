@@ -63,9 +63,12 @@ const CartScreen = ({ navigation }) => {
               quantity,
               product: {
                 name,
+                number,
                 image,
+                hotel,
                 description,
                 price,
+                price_per_night,
                 rating,
                 tags,
                 images,
@@ -73,27 +76,39 @@ const CartScreen = ({ navigation }) => {
                 type: { name: category },
               },
             } = item;
+            const proImage =
+              (images ?? [])[0]?.image ??
+              image ??
+              "https://placehold.co/600x400";
             // console.log(item);
             return (
               <List.Item
                 style={styles.item}
                 title={() => (
                   <Text variant="titleLarge" style={{ fontWeight: "bold" }}>
-                    {name}
+                    {name ?? `${hotel?.name}-${number}`}
                   </Text>
                 )}
                 description={() => (
                   <List.Item
-                    title={() => <Text>{`${category} | ${price}`}</Text>}
+                    title={() => (
+                      <Text>{`${category} | ${price ?? price_per_night}`}</Text>
+                    )}
                     description={() => (
                       <Text variant="bodyLarge" style={{ fontWeight: "bold" }}>
-                        Ksh. {parseFloat(price) * parseFloat(quantity)}
+                        Ksh.{" "}
+                        {parseFloat(price ?? price_per_night) *
+                          parseFloat(quantity)}
                       </Text>
                     )}
                   />
                 )}
                 left={(props) => (
-                  <Avatar.Image {...props} source={{ uri: image }} size={70} />
+                  <Avatar.Image
+                    {...props}
+                    source={{ uri: proImage }}
+                    size={70}
+                  />
                 )}
                 right={(props) => (
                   <Card.Actions
