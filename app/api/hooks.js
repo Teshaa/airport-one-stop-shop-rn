@@ -63,6 +63,12 @@ export const useShop = () => {
   };
 };
 
+export const useAirpot = () => {
+  const getServices = () => apiClient.get("services/");
+  const getTerminal = () => apiClient.get("terminals/");
+  return { getTerminal, getServices };
+};
+
 export const useAccomodation = () => {
   const endPoint = "hotels/";
 

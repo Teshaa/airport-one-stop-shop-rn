@@ -1,7 +1,7 @@
 import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import AppSafeArea from "../../components/AppSafeArea";
-import { httpService, useShop, useUser } from "../../api/hooks";
+import { httpService, useAirpot, useShop, useUser } from "../../api/hooks";
 import {
   ActivityIndicator,
   Avatar,
@@ -14,7 +14,6 @@ import colors from "../../utils/colors";
 import ScrollableIconButtons from "../../components/button/ScrollableIconButtons";
 import routes from "../../navigation/routes";
 import Product from "../../components/product/Product";
-import { services } from "../../utils/constants";
 import SearchBar from "../../components/input/SearchBar";
 import AccomodationCard from "../../components/accomodation/AccomodationCard";
 import Accomodations from "../../components/accomodation/Accomodations";
@@ -22,10 +21,12 @@ import FoodCategories from "../../components/eateries/FoodCategories";
 
 const HomeScreen = ({ navigation }) => {
   const { getCategories, getProducts } = useShop();
+  const { getServices, getTerminal } = useAirpot();
   const { products, setProducts, setCategories } = useShopContext();
   const { user } = useUserContext();
   const { getUser } = useUser();
   const [loading, setLoading] = useState(false);
+  const [services, setService] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [paginator, setPaginator] = useState({
     next: null,
@@ -65,6 +66,17 @@ const HomeScreen = ({ navigation }) => {
     } = productResponse;
     setPaginator({ ...paginator, count, previous, next });
     setProducts(productResult);
+
+    const serviceResponse = await getServices();
+    if (!serviceResponse.ok) {
+      console.log(
+        "Home screen: ",
+        serviceResponse.problem,
+        serviceResponse.data
+      );
+    } else {
+      setService(serviceResponse.data.results);
+    }
   };
 
   const handlePagination = async ({ distanceFromEnd }) => {

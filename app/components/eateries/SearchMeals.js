@@ -122,34 +122,6 @@ const SearchMeals = () => {
       </View>
       {openFilteres && (
         <View style={styles.filters}>
-          {tags.length > 0 && (
-            <>
-              <Text style={styles.headers}>Tags</Text>
-              <FlatList
-                data={tags}
-                keyExtractor={({ name }) => name}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                renderItem={({ item: { name } }) => (
-                  <Chip
-                    style={[
-                      styles.chip,
-                      activeChips.indexOf(name) !== -1
-                        ? { backgroundColor: colors.light }
-                        : {},
-                    ]}
-                    selected={activeChips.indexOf(name) !== -1}
-                    showSelectedOverlay
-                    onPress={() => {
-                      handleTagClick(name);
-                    }}
-                  >
-                    {name}
-                  </Chip>
-                )}
-              />
-            </>
-          )}
           {categories.length > 0 && (
             <>
               <Text style={styles.headers}>Product categories</Text>
@@ -192,6 +164,8 @@ const SearchMeals = () => {
                 setShowSliderOverlay(false);
               }}
             />
+
+            
             <Text variant="bodyLarge" style={styles.prices}>
               {priceRange[1]}
             </Text>
