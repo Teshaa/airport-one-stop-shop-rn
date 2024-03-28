@@ -115,7 +115,7 @@ const ProductDetailScreen = ({ navigation, route }) => {
                   navigation.goBack();
                 }}
               >
-                AddToCart
+                Buy now
               </Button>
             </View>
           </View>

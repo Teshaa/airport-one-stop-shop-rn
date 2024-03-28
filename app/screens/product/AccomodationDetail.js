@@ -14,6 +14,7 @@ import Quantorsizer from "../../components/input/Quantorsizer";
 import ExpandableText from "../../components/display/ExpandableText";
 import { useCartContext } from "../../context/hooks";
 import routes from "../../navigation/routes";
+import DateTimePicker from "../../components/input/DatePicker";
 
 const AccomodationDetail = ({ navigation, route }) => {
   const [quantity, setQuantity] = useState(1);
@@ -84,6 +85,7 @@ const AccomodationDetail = ({ navigation, route }) => {
           <Text style={styles.text} variant="headlineLarge">
             Ksh. {parseFloat(price) * quantity}
           </Text>
+          <DateTimePicker label="Reservation Date" icon={"calendar"} />
           <View style={styles.cart}>
             <Quantorsizer
               value={quantity}
@@ -106,7 +108,7 @@ const AccomodationDetail = ({ navigation, route }) => {
                   navigation.goBack();
                 }}
               >
-                AddToCart
+                Reserve Now
               </Button>
             </View>
           </View>

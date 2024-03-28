@@ -52,10 +52,13 @@ export const useCartContext = () => {
     return count;
   };
   const getPostItems = () => {
-    const items = cartItems.map(({ product: { url: product }, quantity }) => ({
-      product,
-      quantity,
-    }));
+    const items = cartItems.map(
+      ({ product: { url: product, productType }, quantity }) => ({
+        product,
+        quantity,
+        productType,
+      })
+    );
     return { items };
   };
   const getPostItemsFormData = () => {
