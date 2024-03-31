@@ -54,6 +54,25 @@ const AccountScreen = ({ navigation }) => {
       <TouchableOpacity
         onPress={() =>
           navigation.navigate(routes.USER_NAVIGATION, {
+            screen: routes.RESERVATIONS_SCREEN,
+          })
+        }
+      >
+        <Card.Title
+          style={styles.listItem}
+          subtitle="Reservation History"
+          subtitleVariant="bodyLarge"
+          left={(props) => (
+            <Avatar.Icon style={styles.icon} {...props} icon="history" />
+          )}
+          right={(props) => (
+            <IconButton {...props} icon="chevron-right" disabled />
+          )}
+        />
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate(routes.USER_NAVIGATION, {
             screen: routes.PAYMENTS_SCREEN,
           })
         }

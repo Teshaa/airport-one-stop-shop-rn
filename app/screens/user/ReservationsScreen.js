@@ -7,15 +7,15 @@ import moment from "moment/moment";
 import routes from "../../navigation/routes";
 import colors from "../../utils/colors";
 
-const OrdersScreen = ({ navigation }) => {
+const ReservationsScreen = ({ navigation }) => {
   const { token } = useUserContext();
-  const { getOrders } = useUser();
-  const [orders, setOrders] = useState([]);
+  const { getReservations } = useUser();
+  const [reservations, serReservatons] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
   const handleFetch = async () => {
     setRefreshing(true);
-    const response = await getOrders(token, { page_size: 100 });
+    const response = await getReservations(token, { page_size: 100 });
     setRefreshing(false);
     if (!response.ok) {
       return console.log("OrderScreen: ", response.problem, response.data);
@@ -23,7 +23,7 @@ const OrdersScreen = ({ navigation }) => {
     const {
       data: { results },
     } = response;
-    setOrders(results);
+    serReservatons(results);
   };
 
   useEffect(() => {
@@ -32,21 +32,22 @@ const OrdersScreen = ({ navigation }) => {
   return (
     <View>
       <FlatList
-        data={orders}
+        data={reservations}
         refreshing={refreshing}
         onRefresh={handleFetch}
         keyExtractor={({ id }) => id}
         renderItem={({ item }) => {
           const {
-            food_item: {
-              name,
+            room: {
+              number,
               type: { name: type },
-              image,
+              images,
+              hotel: { name },
             },
-            quantity,
-
-            price,
+            nights: quantity,
+            price_per_night: price,
             status,
+            checkin_date,
             created_at,
           } = item;
           return (
@@ -55,7 +56,7 @@ const OrdersScreen = ({ navigation }) => {
             >
               <Card.Title
                 style={styles.orderCard}
-                title={name}
+                title={`${name}-${number}`}
                 subtitle={`${moment(created_at).format(
                   "Do MMM YYYY, h:mm a"
                 )} | ${quantity} items | @Ksh. ${price}`}
@@ -63,7 +64,9 @@ const OrdersScreen = ({ navigation }) => {
                 subtitleStyle={{ color: colors.medium }}
                 left={(props) => (
                   <Avatar.Image
-                    source={{ uri: image }}
+                    source={{
+                      uri: images[0].image ?? "https://placehold.co/600x400",
+                    }}
                     {...props}
                     style={{ backgroundColor: colors.light }}
                   />
@@ -89,7 +92,7 @@ const OrdersScreen = ({ navigation }) => {
   );
 };
 
-export default OrdersScreen;
+export default ReservationsScreen;
 
 const styles = StyleSheet.create({
   orderCard: {

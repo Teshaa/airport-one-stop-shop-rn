@@ -11,6 +11,8 @@ export default Object.freeze({
   PROFILE_SCREEN: "Profile Screen",
   USER_NAVIGATION: "User nav",
   ORDERS_SCREEN: "Orders Screen",
+  RESERVATIONS_SCREEN: "Reservations Screen",
+  RESERVATION_SCREEN: "Reservation Screen",
   ORDER_SCREEN: "Order Screen",
   TRANSACTIONS_SCREEN: "Transactions Screen",
   PAYMENTS_SCREEN: "Payments Screen",
