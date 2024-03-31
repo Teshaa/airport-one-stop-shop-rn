@@ -15,10 +15,11 @@ import ExpandableText from "../../components/display/ExpandableText";
 import { useCartContext } from "../../context/hooks";
 import routes from "../../navigation/routes";
 import DateTimePicker from "../../components/input/DatePicker";
+import moment from "moment/moment";
 
 const AccomodationDetail = ({ navigation, route }) => {
-  const [quantity, setQuantity] = useState(1);
-  const { addToCart } = useCartContext();
+  const [nights, setNights] = useState(1);
+  const [date, setDate] = useState(new Date());
   const {
     name,
     image,
@@ -83,16 +84,24 @@ const AccomodationDetail = ({ navigation, route }) => {
         </View>
         <View>
           <Text style={styles.text} variant="headlineLarge">
-            Ksh. {parseFloat(price) * quantity}
+            Ksh. {parseFloat(price) * nights}
           </Text>
-          <DateTimePicker label="Reservation Date" icon={"calendar"} />
+          <DateTimePicker
+            label="Reservation Date"
+            date={date}
+            onDateChanged={setDate}
+            prefixIcon={"calendar"}
+            formater={(date) => moment(date).format("Do dd MM yyy")}
+            surfixIcon={"chevron-down"}
+            mode="date"
+            variant="outlined"
+          />
+          <Text>Nights</Text>
           <View style={styles.cart}>
             <Quantorsizer
-              value={quantity}
-              onIncreament={() => setQuantity(quantity + 1)}
-              onDecrement={() =>
-                quantity > 1 ? setQuantity(quantity - 1) : null
-              }
+              value={nights}
+              onIncreament={() => setNights(nights + 1)}
+              onDecrement={() => (nights > 1 ? setNights(nights - 1) : null)}
             />
             <View style={{ flex: 1, padding: 10 }}>
               <Button
@@ -103,7 +112,7 @@ const AccomodationDetail = ({ navigation, route }) => {
                 onPress={() => {
                   addToCart({
                     product: { ...route.params, productType: "accomodation" },
-                    quantity,
+                    quantity: nights,
                   });
                   navigation.goBack();
                 }}
