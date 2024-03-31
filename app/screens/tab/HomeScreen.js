@@ -11,6 +11,7 @@ import { httpService, useAirpot, useShop, useUser } from "../../api/hooks";
 import {
   ActivityIndicator,
   Avatar,
+  Button,
   IconButton,
   List,
   Text,
@@ -157,7 +158,7 @@ const HomeScreen = ({ navigation }) => {
           }}
           disabled
         />
-
+        
         <Accomodations />
         <View style={styles.productsContainer}>
           <FoodCategories />

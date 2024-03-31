@@ -7,6 +7,7 @@ import { useUser } from "../../api/hooks";
 import routes from "../../navigation/routes";
 import { Avatar, Card, IconButton } from "react-native-paper";
 import colors from "../../utils/colors";
+import { ScannerWrapper } from "../../components/scanner";
 
 const AccountScreen = ({ navigation }) => {
   const { user } = useUserContext();
@@ -89,6 +90,19 @@ const AccountScreen = ({ navigation }) => {
           )}
         />
       </TouchableOpacity>
+      <ScannerWrapper onScaned={(scanned) => alert(scanned)}>
+        <Card.Title
+          style={styles.listItem}
+          subtitle="Confirm Receipt"
+          subtitleVariant="bodyLarge"
+          left={(props) => (
+            <Avatar.Icon style={styles.icon} {...props} icon="qrcode-scan" />
+          )}
+          right={(props) => (
+            <IconButton {...props} icon="chevron-right" disabled />
+          )}
+        />
+      </ScannerWrapper>
       <TouchableOpacity
         onPress={() => {
           Alert.alert("Logout", "Are you sure you want to sign out", [
