@@ -52,7 +52,9 @@ const ReservationsScreen = ({ navigation }) => {
           } = item;
           return (
             <TouchableOpacity
-              onPress={() => navigation.navigate(routes.ORDER_SCREEN, item)}
+              onPress={() =>
+                navigation.navigate(routes.RESERVATION_SCREEN, item)
+              }
             >
               <Card.Title
                 style={styles.orderCard}

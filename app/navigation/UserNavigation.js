@@ -7,6 +7,7 @@ import routes from "./routes";
 import PaymentDetailScreen from "../screens/user/PaymentDetailScreen";
 import AccomodationDetail from "../screens/product/AccomodationDetail";
 import ReservationsScreen from "../screens/user/ReservationsScreen";
+import ResearvationDetailScreen from "../screens/user/ResearvationDetailScreen";
 
 const Stack = createStackNavigator();
 
@@ -47,16 +48,16 @@ const UserNavigation = () => {
         name={routes.ORDER_SCREEN}
         component={OrderDetailScreen}
         options={({ route }) => ({
-          title: route.params.order_id,
+          title: route.params.food_item.name,
         })}
       />
-      {/* <Screen
-        name={routes.ACCOMODATION_SCREEN}
-        component={AccomodationDetail}
+      <Screen
+        name={routes.RESERVATION_SCREEN}
+        component={ResearvationDetailScreen}
         options={({ route }) => ({
-          title: route.params.order_id,
+          title: `${route.params.room.hotel.name}-${route.params.room.number}`,
         })}
-      /> */}
+      />
     </Navigator>
   );
 };
