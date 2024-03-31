@@ -6,18 +6,25 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
-import { Button, Card, List, Text } from "react-native-paper";
+import { Button, Card, List, Text, Snackbar } from "react-native-paper";
 import colors from "../../utils/colors";
 import RatingBar from "../../components/ratingbar/RatingBar";
 import Quantorsizer from "../../components/input/Quantorsizer";
 import ExpandableText from "../../components/display/ExpandableText";
-import { useCartContext } from "../../context/hooks";
+import { useCartContext, useUserContext } from "../../context/hooks";
 import routes from "../../navigation/routes";
+import { useShop } from "../../api/hooks";
 
 const ProductDetailScreen = ({ navigation, route }) => {
+  const [visible, setVisible] = React.useState(false);
+  const [snackMessage, setSnackMessage] = React.useState("");
+  const onToggleSnackBar = () => setVisible(!visible);
+  const onDismissSnackBar = () => setVisible(false);
   const [quantity, setQuantity] = useState(1);
-  const { addToCart } = useCartContext();
+  const { postOrder } = useShop();
+  const { token } = useUserContext();
   const {
+    id: food_item,
     name,
     image,
     description,
@@ -29,6 +36,19 @@ const ProductDetailScreen = ({ navigation, route }) => {
   } = route.params;
   const imageHeight = Dimensions.get("window").height * 0.4;
   const [currHeroImage, setcurrHeroImage] = useState(image);
+
+  const handleOrder = async () => {
+    const data = { quantity, food_item };
+    const response = await postOrder(token, data);
+    if (!response.ok) {
+      setSnackMessage(JSON.stringify(response.data));
+      onToggleSnackBar();
+      return console.log("CartScreen: ", response.problem, response.data);
+    }
+    setSnackMessage(" Your order was received successfully");
+    onToggleSnackBar();
+    // navigation.goBack();
+  };
   return (
     <View style={styles.screen}>
       <ScrollView>
@@ -38,16 +58,6 @@ const ProductDetailScreen = ({ navigation, route }) => {
             source={{ uri: currHeroImage }}
             resizeMode="cover"
           />
-
-          {/* <ScrollableThumbnails
-            uris={[...images.map(({ image: img }) => img), image]}
-            onPress={(uri) => setcurrHeroImage(uri)}
-          /> */}
-          {/* <ExpandableText
-            text={description}
-            threshHold={300}
-            title="Description"
-          /> */}
           <List.Item
             title={"Prepairation time"}
             left={(props) => <List.Icon {...props} icon={"timeline-clock"} />}
@@ -107,13 +117,7 @@ const ProductDetailScreen = ({ navigation, route }) => {
                 mode="outlined"
                 icon="cart"
                 textColor={colors.primary}
-                onPress={() => {
-                  addToCart({
-                    product: { ...route.params, productType: "meal" },
-                    quantity,
-                  });
-                  navigation.goBack();
-                }}
+                onPress={handleOrder}
               >
                 Buy now
               </Button>
@@ -121,6 +125,20 @@ const ProductDetailScreen = ({ navigation, route }) => {
           </View>
         </View>
       </View>
+      <Snackbar
+        visible={visible}
+        onDismiss={onDismissSnackBar}
+        action={{
+          label: "View Orders",
+          onPress: () => {
+            navigation.navigate(routes.USER_NAVIGATION, {
+              screen: routes.ORDERS_SCREEN,
+            });
+          },
+        }}
+      >
+        {snackMessage}
+      </Snackbar>
     </View>
   );
 };
