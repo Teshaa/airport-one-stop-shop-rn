@@ -5,7 +5,7 @@ import {
   Dimensions,
   TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Card, List, Text, Snackbar } from "react-native-paper";
 import colors from "../../utils/colors";
 import RatingBar from "../../components/ratingbar/RatingBar";
@@ -13,7 +13,8 @@ import Quantorsizer from "../../components/input/Quantorsizer";
 import ExpandableText from "../../components/display/ExpandableText";
 import { useCartContext, useUserContext } from "../../context/hooks";
 import routes from "../../navigation/routes";
-import { useShop } from "../../api/hooks";
+import { useAirpot, useShop } from "../../api/hooks";
+import ItemPicker from "../../components/input/ItemPicker";
 
 const ProductDetailScreen = ({ navigation, route }) => {
   const [visible, setVisible] = React.useState(false);
@@ -23,6 +24,9 @@ const ProductDetailScreen = ({ navigation, route }) => {
   const [quantity, setQuantity] = useState(1);
   const { postOrder } = useShop();
   const { token } = useUserContext();
+  const { getTerminal } = useAirpot();
+  const [terminals, setTerminals] = useState([]);
+  const [terminal, setTerminal] = useState();
   const {
     id: food_item,
     name,
@@ -37,8 +41,17 @@ const ProductDetailScreen = ({ navigation, route }) => {
   const imageHeight = Dimensions.get("window").height * 0.4;
   const [currHeroImage, setcurrHeroImage] = useState(image);
 
+  useEffect(() => {
+    (async () => {
+      const response = await getTerminal();
+      if (response.ok) {
+        setTerminals(response.data.results);
+      }
+    })();
+  }, []);
+
   const handleOrder = async () => {
-    const data = { quantity, food_item };
+    const data = { quantity, food_item, terminal };
     const response = await postOrder(token, data);
     if (!response.ok) {
       setSnackMessage(JSON.stringify(response.data));
@@ -103,6 +116,24 @@ const ProductDetailScreen = ({ navigation, route }) => {
           <Text style={styles.text} variant="headlineLarge">
             Ksh. {parseFloat(price) * quantity}
           </Text>
+          <ItemPicker
+            item={terminal}
+            onItemChanged={setTerminal}
+            label={"Terminal"}
+            data={terminals}
+            valueExtractor={(item) => item.id}
+            labelExtractor={(item) => item.name}
+            renderItem={({ item }) => (
+              <List.Item
+                left={(props) => <List.Icon {...props} icon={"logout"} />}
+                title={item.name}
+                style={{ marginVertical: 5 }}
+              />
+            )}
+            prefixIcon={"logout"}
+            searchable
+            surfixIcon={"chevron-down"}
+          />
           <View style={styles.cart}>
             <Quantorsizer
               value={quantity}

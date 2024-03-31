@@ -122,7 +122,7 @@ const AccomodationDetail = ({ navigation, route }) => {
             formater={(date) => moment(date).format("Do dd MM yyy")}
             surfixIcon={"chevron-down"}
             mode="date"
-            variant="outlined"
+            // variant="outlined"
           />
           <Text>Nights</Text>
           <View style={styles.cart}>

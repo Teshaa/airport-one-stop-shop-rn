@@ -13,6 +13,7 @@ const FoodCategories = () => {
         <List.Icon icon="chevron-right" />
       </View>
       <FlatList
+        nestedScrollEnabled={false}
         data={categories}
         keyExtractor={({ id }) => id}
         renderItem={({ item: { id, image, name, description } }) => (

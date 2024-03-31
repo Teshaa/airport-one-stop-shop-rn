@@ -1,4 +1,10 @@
-import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+  FlatList,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import AppSafeArea from "../../components/AppSafeArea";
 import { httpService, useAirpot, useShop, useUser } from "../../api/hooks";
@@ -104,57 +110,59 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <AppSafeArea>
-      <View style={styles.headerontainer}>
-        <IconButton
-          icon="menu"
-          // iconColor={colors.white}
-          onPress={() => {
-            navigation.navigate(routes.SEARCH_SCREEN);
+      <ScrollView>
+        <View style={styles.headerontainer}>
+          <IconButton
+            icon="menu"
+            // iconColor={colors.white}
+            onPress={() => {
+              navigation.navigate(routes.SEARCH_SCREEN);
+            }}
+            size={30}
+          />
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate(routes.USER_NAVIGATION, {
+                screen: routes.PROFILE_SCREEN,
+                params: user,
+              })
+            }
+          >
+            {user && user.profile.image ? (
+              <Avatar.Image source={{ uri: user.profile.image }} size={45} />
+            ) : (
+              <Avatar.Icon
+                icon="account"
+                size={45}
+                style={{ backgroundColor: colors.light }}
+              />
+            )}
+          </TouchableOpacity>
+        </View>
+        <Text variant="headlineSmall" style={{ padding: 10 }}>
+          Welcome {user?.username ?? ""} 👋
+        </Text>
+        <View style={{ padding: 10 }}>
+          <SearchBar />
+        </View>
+        <ScrollableIconButtons
+          title="Services"
+          data={services}
+          imageExtractor={({ image }) => image}
+          keyExtractor={({ id }) => id}
+          titleExtractor={({ title }) => title}
+          selectable={false}
+          onItemClicked={(item) => {
+            console.log(item);
           }}
-          size={30}
+          disabled
         />
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate(routes.USER_NAVIGATION, {
-              screen: routes.PROFILE_SCREEN,
-              params: user,
-            })
-          }
-        >
-          {user && user.profile.image ? (
-            <Avatar.Image source={{ uri: user.profile.image }} size={45} />
-          ) : (
-            <Avatar.Icon
-              icon="account"
-              size={45}
-              style={{ backgroundColor: colors.light }}
-            />
-          )}
-        </TouchableOpacity>
-      </View>
-      <Text variant="headlineLarge" style={{ padding: 10 }}>
-        Welcome {user?.username ?? ""} 👋
-      </Text>
-      <View style={{ padding: 10 }}>
-        <SearchBar />
-      </View>
-      <ScrollableIconButtons
-        title="Services"
-        data={services}
-        imageExtractor={({ image }) => image}
-        keyExtractor={({ id }) => id}
-        titleExtractor={({ title }) => title}
-        selectable={false}
-        onItemClicked={(item) => {
-          console.log(item);
-        }}
-        disabled
-      />
 
-      <Accomodations />
-      <View style={styles.productsContainer}>
-        <FoodCategories />
-      </View>
+        <Accomodations />
+        <View style={styles.productsContainer}>
+          <FoodCategories />
+        </View>
+      </ScrollView>
     </AppSafeArea>
   );
 };
