@@ -27,7 +27,7 @@ const SearchAccomodation = () => {
   const [activeChips, setActiveChips] = useState([]);
   const [activeCategory, setActiveCtegory] = useState([]);
   const [searchString, setSearchString] = useState();
-  const [priceRange, setPriceRange] = useState([4000, 300000]);
+  const [priceRange, setPriceRange] = useState([1500, 20000]);
   const [showSliderOverlay, setShowSliderOverlay] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [openFilteres, setOpenFilders] = useState(false);
@@ -188,11 +188,11 @@ const SearchAccomodation = () => {
             <MultiSlider
               style={styles.slide}
               sliderLength={Dimensions.get("screen").width * 0.63}
-              max={1000000}
-              min={0}
+              max={20000}
+              min={1500}
               values={priceRange}
               onValuesChangeStart={() => setShowSliderOverlay(true)}
-              step={100}
+              step={500}
               enableLabel={showSliderOverlay}
               containerStyle={{ paddingHorizontal: 10 }}
               onValuesChangeFinish={(values) => {

@@ -43,7 +43,7 @@ function BottomTabNavigation() {
           ),
         }}
       />
-      <Screen
+      {/* <Screen
         component={CartScreen}
         name={routes.CART_SCREEN}
         options={{
@@ -66,7 +66,7 @@ function BottomTabNavigation() {
             </View>
           ),
         }}
-      />
+      /> */}
       <Screen
         component={AccountScreen}
         name={routes.ACCOUNT_SCREEN}

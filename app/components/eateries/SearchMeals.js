@@ -21,7 +21,7 @@ const SearchMeals = () => {
   const [activeChips, setActiveChips] = useState([]);
   const [activeCategory, setActiveCtegory] = useState([]);
   const [searchString, setSearchString] = useState();
-  const [priceRange, setPriceRange] = useState([4000, 300000]);
+  const [priceRange, setPriceRange] = useState([100, 3000]);
   const [showSliderOverlay, setShowSliderOverlay] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [openFilteres, setOpenFilders] = useState(false);
@@ -152,11 +152,11 @@ const SearchMeals = () => {
             <MultiSlider
               style={styles.slide}
               sliderLength={Dimensions.get("screen").width * 0.63}
-              max={1000000}
-              min={0}
+              max={3000}
+              min={100}
               values={priceRange}
               onValuesChangeStart={() => setShowSliderOverlay(true)}
-              step={100}
+              step={20}
               enableLabel={showSliderOverlay}
               containerStyle={{ paddingHorizontal: 10 }}
               onValuesChangeFinish={(values) => {
@@ -165,7 +165,6 @@ const SearchMeals = () => {
               }}
             />
 
-            
             <Text variant="bodyLarge" style={styles.prices}>
               {priceRange[1]}
             </Text>
