@@ -1,17 +1,37 @@
-import { Alert, StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import React, { useEffect } from "react";
+import {
+  Alert,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
+import React, { useEffect, useState } from "react";
 import AppSafeArea from "../../components/AppSafeArea";
 import ListItem from "../../components/ListItem";
 import { useUserContext } from "../../context/hooks";
 import { useUser } from "../../api/hooks";
 import routes from "../../navigation/routes";
-import { Avatar, Card, IconButton } from "react-native-paper";
+import {
+  Text,
+  Avatar,
+  Button,
+  Card,
+  IconButton,
+  TextInput,
+} from "react-native-paper";
 import colors from "../../utils/colors";
 import { ScannerWrapper } from "../../components/scanner";
+import { Dialog } from "../../components/dialog";
 
 const AccountScreen = ({ navigation }) => {
-  const { user } = useUserContext();
-  const { getUser, logout } = useUser();
+  const { user, token } = useUserContext();
+  const { getUser, logout, makeOrderPayment } = useUser();
+  const handleOrderPayment = async () => {};
+  const [mpesaPrompt, setMpesPropmt] = useState({
+    show: false,
+    phoneNumber: "",
+    code: "",
+  });
   useEffect(() => {
     if (!user) {
       getUser();
@@ -90,7 +110,11 @@ const AccountScreen = ({ navigation }) => {
           )}
         />
       </TouchableOpacity>
-      <ScannerWrapper onScaned={(scanned) => alert(scanned)}>
+      <ScannerWrapper
+        onScaned={(scanned) => {
+          setMpesPropmt((state) => ({ ...state, show: true, code: scanned }));
+        }}
+      >
         <Card.Title
           style={styles.listItem}
           subtitle="Confirm Receipt"
@@ -123,6 +147,37 @@ const AccountScreen = ({ navigation }) => {
           )}
         />
       </TouchableOpacity>
+      <Dialog
+        visible={mpesaPrompt.show}
+        onRequestClose={() =>
+          setMpesPropmt((state) => ({ ...state, show: false }))
+        }
+      >
+        <View style={{ width: Dimensions.get("screen").width * 0.75 }}>
+          <Text variant="headlineLarge">Mpesa Number</Text>
+          <TextInput
+            value={mpesaPrompt.phoneNumber}
+            label={"Phone number"}
+            placeholder="e.g 0712345678"
+            onChangeText={(value) =>
+              setMpesPropmt((state) => ({ ...state, phoneNumber: value }))
+            }
+          />
+          <Button
+            style={{ marginTop: 10 }}
+            mode="contained"
+            onPress={async () => {
+              const response = await makeOrderPayment(token, mpesaPrompt.code, {
+                phoneNumber: mpesaPrompt.phoneNumber,
+              });
+              if (response.ok) console.log("Success!");
+              else console.log(response.data);
+            }}
+          >
+            Make payment
+          </Button>
+        </View>
+      </Dialog>
     </AppSafeArea>
   );
 };

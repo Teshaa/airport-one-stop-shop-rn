@@ -32,6 +32,10 @@ export const useUser = () => {
     });
   const getOrders = (token, params) =>
     apiClient.get("meals/orders/", params, { headers: getAuthHeader(token) });
+  const makeOrderPayment = (token, id, data) =>
+    apiClient.post(`meals/orders/${id}/make_payment/`, data, {
+      headers: getAuthHeader(token),
+    });
   const getReservations = (token, params) =>
     apiClient.get("hotels/reservations/", params, {
       headers: getAuthHeader(token),
@@ -47,6 +51,7 @@ export const useUser = () => {
     getOrders,
     getPayments,
     getReservations,
+    makeOrderPayment,
   };
 };
 
@@ -59,6 +64,8 @@ export const useShop = () => {
   const endPoint = "meals/";
   const getCategories = (params) =>
     apiClient.get(`${endPoint}food-types/`, params);
+  const getRestaurants = (params) =>
+    apiClient.get(`${endPoint}restaurants/`, params);
   const getProducts = (params) => apiClient.get(endPoint, params);
   const postOrder = (token, data) =>
     apiClient.post(`${endPoint}orders/`, data, {
@@ -75,6 +82,7 @@ export const useShop = () => {
     postOrder,
     getReviews,
     addReview,
+    getRestaurants,
   };
 };
 

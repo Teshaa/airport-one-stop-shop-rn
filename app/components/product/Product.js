@@ -22,6 +22,7 @@ const Product = ({ product: item }) => {
     images,
     updated,
     type: { name: categry },
+    restaurant: { name: restaurant },
     // reviews: { count: reviews },
   } = item;
   return (
@@ -40,16 +41,14 @@ const Product = ({ product: item }) => {
       ]}
     >
       <Card.Content>
-        <Text variant="titleMedium">{name}</Text>
+        <Text variant="titleMedium">{restaurant}</Text>
         <Text variant="bodyMedium" style={{ color: colors.medium }}>
           {categry}
         </Text>
       </Card.Content>
       <Card.Cover source={{ uri: image }} resizeMode="cover" />
       <Card.Actions>
-        <Text style={{ color: colors.medium }}>
-          {`${moment(updated).format("Do MMM YYYY")} | `}
-        </Text>
+        <Text style={{ color: colors.medium }}>{name}</Text>
         <RatingBar starSize={15} defaultRating={rating} disabled />
         <Text>({rating})</Text>
       </Card.Actions>

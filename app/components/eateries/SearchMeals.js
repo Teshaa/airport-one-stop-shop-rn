@@ -15,8 +15,9 @@ import { useShopContext } from "../../context/hooks";
 import { useShop } from "../../api/hooks";
 
 const SearchMeals = () => {
-  const { getProducts, getCategories } = useShop();
+  const { getProducts, getCategories, getRestaurants } = useShop();
   const [tags, setTags] = useState([]);
+  const [restaurants, setRestaurants] = useState([]);
   const { products, setProducts, categories, setCategories } = useShopContext();
   const [activeChips, setActiveChips] = useState([]);
   const [activeCategory, setActiveCtegory] = useState([]);
@@ -47,6 +48,7 @@ const SearchMeals = () => {
   const handlFetch = async () => {
     const tagsResponse = await getCategories({ page_size: 1000 });
     const categoryResponse = await getCategories();
+    const restaurantResponse = await getRestaurants();
     if (!tagsResponse.ok) {
       console.log("SearchScreen: ", tagsResponse.problem, tags.data);
     }
@@ -57,8 +59,16 @@ const SearchMeals = () => {
         categoryResponse.data
       );
     }
+    if (!restaurantResponse.ok) {
+      console.log(
+        "SearchScreen: ",
+        restaurantResponse.problem,
+        restaurantResponse.data
+      );
+    }
     setTags(tagsResponse.data.results);
     setCategories(categoryResponse.data.results);
+    setRestaurants(restaurantResponse.data.results);
     setRefreshing(true);
     await fetchProducts();
     setRefreshing(false);
@@ -122,6 +132,28 @@ const SearchMeals = () => {
       </View>
       {openFilteres && (
         <View style={styles.filters}>
+          {restaurants.length > 0 && (
+            <>
+              <Text style={styles.headers}>Restaurants </Text>
+              <FlatList
+                data={restaurants}
+                keyExtractor={({ url }) => url}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                renderItem={({ item: { name, images, logo } }) => (
+                  <ImageButton
+                    style={styles.chip}
+                    image={{ uri: logo }}
+                    title={name}
+                    onPress={() => handleCategoryClicked(name)}
+                    activeBackgroundColor={colors.medium}
+                    activeTintColor={colors.white}
+                    active={name === activeCategory}
+                  />
+                )}
+              />
+            </>
+          )}
           {categories.length > 0 && (
             <>
               <Text style={styles.headers}>Product categories</Text>
@@ -144,6 +176,7 @@ const SearchMeals = () => {
               />
             </>
           )}
+
           <Text style={styles.headers}>Price Range in Ksh</Text>
           <View style={styles.sliderContainer}>
             <Text variant="bodyLarge" style={styles.prices}>
