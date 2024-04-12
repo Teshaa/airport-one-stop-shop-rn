@@ -4,6 +4,8 @@ import {
   TextInput,
   FlatList,
   Dimensions,
+  TouchableOpacity,
+  Image,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import colors from "../../utils/colors";
@@ -21,6 +23,7 @@ const SearchMeals = () => {
   const { products, setProducts, categories, setCategories } = useShopContext();
   const [activeChips, setActiveChips] = useState([]);
   const [activeCategory, setActiveCtegory] = useState([]);
+  const [activeRestaurant, setActiveRestaurant] = useState();
   const [searchString, setSearchString] = useState();
   const [priceRange, setPriceRange] = useState([100, 3000]);
   const [showSliderOverlay, setShowSliderOverlay] = useState(false);
@@ -31,6 +34,7 @@ const SearchMeals = () => {
     const productsResponse = await getProducts({
       tags: activeChips.join(","),
       type: activeCategory,
+      restaurant: activeRestaurant,
       search: searchString,
       price_min: priceRange ? priceRange[0] : null,
       price_max: priceRange ? priceRange[1] : null,
@@ -97,6 +101,13 @@ const SearchMeals = () => {
     if (activeCategory === category) setActiveCtegory(null);
     else setActiveCtegory(category);
   };
+  const handleRestaurantlicked = (restaurant) => {
+    if (activeRestaurant === restaurant) {
+      setActiveRestaurant(undefined);
+    } else {
+      setActiveRestaurant(restaurant);
+    }
+  };
 
   useEffect(() => {
     handlFetch();
@@ -104,7 +115,7 @@ const SearchMeals = () => {
 
   useEffect(() => {
     fetchProducts();
-  }, [activeChips, activeCategory, searchString, priceRange]);
+  }, [activeChips, activeCategory, searchString, priceRange, activeRestaurant]);
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.header}>
@@ -140,16 +151,27 @@ const SearchMeals = () => {
                 keyExtractor={({ url }) => url}
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                renderItem={({ item: { name, images, logo } }) => (
-                  <ImageButton
-                    style={styles.chip}
-                    image={{ uri: logo }}
-                    title={name}
-                    onPress={() => handleCategoryClicked(name)}
-                    activeBackgroundColor={colors.medium}
-                    activeTintColor={colors.white}
-                    active={name === activeCategory}
-                  />
+                renderItem={({ item: { name, images, logo, id } }) => (
+                  <TouchableOpacity
+                    onPress={() => {
+                      handleRestaurantlicked(id);
+                    }}
+                    style={{
+                      marginHorizontal: 10,
+                      width: 100,
+                      alignItems: "center",
+                      borderRadius: 10,
+                      overflow: "hidden",
+                      backgroundColor:
+                        id === activeRestaurant ? colors.medium : "white",
+                    }}
+                  >
+                    <Image
+                      source={{ uri: logo }}
+                      style={{ width: "100%", height: 100 }}
+                    />
+                    <Text>{name}</Text>
+                  </TouchableOpacity>
                 )}
               />
             </>
