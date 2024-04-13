@@ -95,6 +95,7 @@ export const useAirpot = () => {
 export const useAccomodation = () => {
   const endPoint = "hotels/";
 
+  const getHotels = (params) => apiClient.get(endPoint, params);
   const getCategories = (params) =>
     apiClient.get(`${endPoint}rooms-types/`, params);
   const getRooms = (params) => apiClient.get(`${endPoint}rooms/`, params);
@@ -115,5 +116,6 @@ export const useAccomodation = () => {
     postOrder,
     getReviews,
     addReview,
+    getHotels,
   };
 };

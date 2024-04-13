@@ -4,6 +4,8 @@ import {
   TextInput,
   FlatList,
   Dimensions,
+  TouchableOpacity,
+  Image,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import colors from "../../utils/colors";
@@ -20,10 +22,12 @@ const itemHeight = Dimensions.get("window").height / 3 - 10; // subtracting marg
 
 const SearchAccomodation = () => {
   const navigation = useNavigation();
-  const { getRooms, getCategories, getTags } = useAccomodation();
+  const { getRooms, getCategories, getTags, getHotels } = useAccomodation();
   const [tags, setTags] = useState([]);
+  const [hotels, setHotels] = useState([]);
   const [rooms, setRooms] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [activeHotel, setActiveHotel] = useState();
   const [activeChips, setActiveChips] = useState([]);
   const [activeCategory, setActiveCtegory] = useState([]);
   const [searchString, setSearchString] = useState();
@@ -39,7 +43,9 @@ const SearchAccomodation = () => {
       search: searchString,
       price_min: priceRange ? priceRange[0] : null,
       price_max: priceRange ? priceRange[1] : null,
+      hotel: activeHotel,
     });
+
     if (!roomsResponse.ok) {
       console.log("SearchScreen: ", roomsResponse.problem, roomsResponse.data);
     }
@@ -49,6 +55,7 @@ const SearchAccomodation = () => {
   const handlFetch = async () => {
     const tagsResponse = await getTags({ page_size: 1000 });
     const categoryResponse = await getCategories();
+    const hotelResponse = await getHotels({ page_size: 1000 });
     if (!tagsResponse.ok) {
       console.log("SearchScreen: ", tagsResponse.problem, tags.data);
     }
@@ -59,8 +66,12 @@ const SearchAccomodation = () => {
         categoryResponse.data
       );
     }
+    if (!hotelResponse.ok) {
+      console.log("SearchScreen: ", hotelResponse.problem, hotelResponse.data);
+    }
     setTags(tagsResponse.data.results);
     setCategories(categoryResponse.data.results);
+    setHotels(hotelResponse.data.results);
     setRefreshing(true);
     await fetchAccomodations();
     setRefreshing(false);
@@ -90,13 +101,21 @@ const SearchAccomodation = () => {
     else setActiveCtegory(category);
   };
 
+  const handleHotelClicked = (hotel) => {
+    if (activeHotel === hotel) {
+      setActiveHotel(undefined);
+    } else {
+      setActiveHotel(hotel);
+    }
+  };
+
   useEffect(() => {
     handlFetch();
   }, []);
 
   useEffect(() => {
     fetchAccomodations();
-  }, [activeChips, activeCategory, searchString, priceRange]);
+  }, [activeChips, activeCategory, searchString, priceRange, activeHotel]);
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.header}>
@@ -152,6 +171,40 @@ const SearchAccomodation = () => {
               />
             </>
           )}
+
+          {hotels.length > 0 && (
+            <>
+              <Text style={styles.headers}>Hotels </Text>
+              <FlatList
+                data={hotels}
+                keyExtractor={({ url }) => url}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                renderItem={({ item: { name, images, logo, id } }) => (
+                  <TouchableOpacity
+                    onPress={() => {
+                      handleHotelClicked(id);
+                    }}
+                    style={{
+                      marginHorizontal: 10,
+                      width: 100,
+                      alignItems: "center",
+                      borderRadius: 10,
+                      overflow: "hidden",
+                      backgroundColor:
+                        id === activeHotel ? colors.medium : "white",
+                    }}
+                  >
+                    <Image
+                      source={{ uri: logo }}
+                      style={{ width: "100%", height: 100 }}
+                    />
+                    <Text>{name}</Text>
+                  </TouchableOpacity>
+                )}
+              />
+            </>
+          )}  
           {categories?.length > 0 && (
             <>
               <Text style={styles.headers}>Room Types</Text>
