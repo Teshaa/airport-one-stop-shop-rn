@@ -118,7 +118,7 @@ const RestaurantDetail = ({ navigation, route }) => {
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             }}
-            style={{ with: "100%", height: "70%" }}
+            style={{ with: "100%", height: "100%" }}
           >
             <Marker
               coordinate={{
@@ -129,14 +129,14 @@ const RestaurantDetail = ({ navigation, route }) => {
               style={{ width: 50, height: 50 }}
             />
           </MapView>
-          <Card.Actions>
+          {/* <Card.Actions>
            
             <Button
               onPress={() => launchGoogleMapsNavigation(latitude, longitude)}
             >
               View in google map
             </Button>
-          </Card.Actions>
+          </Card.Actions> */}
         </Card>
         <List.Item
           title={"Description"}

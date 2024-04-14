@@ -24,6 +24,9 @@ import routes from "../../navigation/routes";
 import DateTimePicker from "../../components/input/DatePicker";
 import moment from "moment/moment";
 import { useAccomodation, useShop } from "../../api/hooks";
+import MapView from "react-native-maps";
+import { Marker } from "react-native-maps";
+import { launchGoogleMapsNavigation } from "../../utils/helpers";
 
 const AccomodationDetail = ({ navigation, route }) => {
   const [visible, setVisible] = React.useState(false);
@@ -40,6 +43,7 @@ const AccomodationDetail = ({ navigation, route }) => {
     rating,
     images,
     type: { name: categry },
+    hotel: { name: hotel, latitude, longitude, address },
     // reviews: { count: reviews },
   } = route.params;
   const { postOrder } = useAccomodation();
@@ -83,6 +87,51 @@ const AccomodationDetail = ({ navigation, route }) => {
             threshHold={300}
             title="Description"
           />
+        </Card>
+        <Card
+          style={{
+            width: "90%",
+            height: 200,
+            alignSelf: "center",
+            overflow: "hidden",
+            margin: 10,
+          }}
+        >
+          <MapView
+            initialRegion={{
+              latitude: parseFloat(latitude),
+              longitude: parseFloat(longitude),
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}
+            style={{ with: "100%", height: "70%" }}
+          >
+            <Marker
+              coordinate={{
+                latitude: parseFloat(latitude),
+                longitude: parseFloat(longitude),
+              }}
+              title={hotel}
+              style={{ width: 50, height: 50 }}
+            />
+          </MapView>
+          <Card.Actions>
+            <Button
+              onPress={() =>
+                navigation.navigate(
+                  routes.HOTEL_DETAIL_SCREEN,
+                  route.params.hotel
+                )
+              }
+            >
+              View Hotel detail
+            </Button>
+            <Button
+              onPress={() => launchGoogleMapsNavigation(latitude, longitude)}
+            >
+              View in google map
+            </Button>
+          </Card.Actions>
         </Card>
       </ScrollView>
       <View style={styles.bottomContainer}>
