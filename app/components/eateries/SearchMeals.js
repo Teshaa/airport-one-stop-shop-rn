@@ -135,7 +135,7 @@ const SearchMeals = () => {
         <IconButton
           onPress={() => setOpenFilders(!openFilteres)}
           style={styles.filterButton}
-          icon="filter"
+          icon="tune-vertical"
           mode="outlined"
           iconColor={colors.white}
           size={27}

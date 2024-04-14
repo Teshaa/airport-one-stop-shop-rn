@@ -135,7 +135,7 @@ const SearchAccomodation = () => {
         <IconButton
           onPress={() => setOpenFilders(!openFilteres)}
           style={styles.filterButton}
-          icon="filter"
+          icon="tune-vertical"
           mode="outlined"
           iconColor={colors.white}
           size={27}
@@ -204,7 +204,7 @@ const SearchAccomodation = () => {
                 )}
               />
             </>
-          )}  
+          )}
           {categories?.length > 0 && (
             <>
               <Text style={styles.headers}>Room Types</Text>

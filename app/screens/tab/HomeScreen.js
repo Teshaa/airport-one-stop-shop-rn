@@ -20,11 +20,11 @@ import { useShopContext, useUserContext } from "../../context/hooks";
 import colors from "../../utils/colors";
 import ScrollableIconButtons from "../../components/button/ScrollableIconButtons";
 import routes from "../../navigation/routes";
-import Product from "../../components/product/Product";
 import SearchBar from "../../components/input/SearchBar";
-import AccomodationCard from "../../components/accomodation/AccomodationCard";
 import Accomodations from "../../components/accomodation/Accomodations";
 import FoodCategories from "../../components/eateries/FoodCategories";
+import Hotels from "../../components/accomodation/Hotels";
+import Restaurants from "../../components/eateries/Restaurants";
 
 const HomeScreen = ({ navigation }) => {
   const { getCategories, getProducts } = useShop();
@@ -48,6 +48,7 @@ const HomeScreen = ({ navigation }) => {
       page_size: paginator.page_size,
     });
     const productResponse = await getProducts();
+
     setRefreshing(false);
     if (!categoryResponse.ok) {
       console.log(
@@ -158,7 +159,7 @@ const HomeScreen = ({ navigation }) => {
           }}
           disabled
         />
-        
+        <Restaurants />
         <Accomodations />
         <View style={styles.productsContainer}>
           <FoodCategories />
