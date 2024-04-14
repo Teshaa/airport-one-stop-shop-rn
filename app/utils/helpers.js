@@ -1,3 +1,6 @@
+import { Linking, Platform } from 'react-native';
+
+
 export const zip = (ar1, ar2) => {
   if (
     !(ar2 instanceof Array && ar1 instanceof Array && ar1.length === ar2.length)
@@ -47,3 +50,23 @@ export const rangeToListInclusive = (start, end) => {
   }
   return list;
 };
+
+
+
+export const launchGoogleMapsNavigation = (latitude, longitude) => {
+  const url = Platform.select({
+    ios: `maps://?daddr=${latitude},${longitude}&dirflg=d`,
+    android: `geo:${latitude},${longitude}?q=my+destination&mode=d`,
+  });
+
+  Linking.canOpenURL(url)
+    .then(supported => {
+      if (supported) {
+        Linking.openURL(url);
+      } else {
+        console.warn(`Google Maps app not found or url not supported: ${url}`);
+      }
+    })
+    .catch(err => console.error('An error occurred launching Google Maps:', err));
+};
+

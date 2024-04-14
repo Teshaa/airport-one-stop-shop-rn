@@ -6,6 +6,8 @@ import routes from "./routes";
 import ProductDetailScreen from "../screens/product/ProductDetailScreen";
 import ReviewsScreen from "../screens/product/ReviewsScreen";
 import AccomodationDetail from "../screens/product/AccomodationDetail";
+import RestaurantDetail from "../screens/product/RestaurantDetail";
+import HotelDetailScreen from "../screens/product/HotelDetailScreen";
 
 const Stack = createStackNavigator();
 
@@ -29,6 +31,16 @@ const ProductNavigation = () => {
         name={routes.PRODUCT_REVIEW_SCREEN}
         component={ReviewsScreen}
         options={({ route }) => ({ title: `${route.params.name} reviews` })}
+      />
+      <Screen
+        name={routes.RESTAURANT_DETAIL_SCREEN}
+        component={RestaurantDetail}
+        options={({ route }) => ({ title: `${route.params.name} potfolio` })}
+      />
+      <Screen
+        name={routes.HOTEL_DETAIL_SCREEN}
+        component={HotelDetailScreen}
+        options={({ route }) => ({ title: `${route.params.name} potfolio` })}
       />
     </Navigator>
   );

@@ -21,4 +21,6 @@ export default Object.freeze({
   PRODUCT_SCREEN: "Product Screen",
   ACCOMODATION_SCREEN: "Accomodation Screen",
   PRODUCT_REVIEW_SCREEN: "Review Screen",
+  RESTAURANT_DETAIL_SCREEN: "Restaurant detail Screen",
+  HOTEL_DETAIL_SCREEN: "Hotel detail Screen",
 });

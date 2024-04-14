@@ -11,13 +11,17 @@ const IconText = ({
   fontWeight,
   left = true,
   onPress,
+  style,
 }) => {
   return (
     <TouchableOpacity
-      style={{
-        flexDirection: left ? "row" : "row-reverse",
-        alignItems: "center",
-      }}
+      style={[
+        style,
+        {
+          flexDirection: left ? "row" : "row-reverse",
+          alignItems: "center",
+        },
+      ]}
       onPress={onPress}
       disabled={!(onPress instanceof Function)}
     >

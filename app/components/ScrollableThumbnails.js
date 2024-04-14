@@ -19,7 +19,7 @@ const ScrollableThumbnails = ({ uris = [], onPress }) => {
       contentContainerStyle={{ backgroundColor: colors.transparent }}
       renderItem={({ item: uri }) => (
         <TouchableOpacity onPress={() => onPress(uri)}>
-          <Image style={styles.image} source={{ uri }} resizeMode="contain" />
+          <Image style={styles.image} source={{ uri }} resizeMode="cover" />
         </TouchableOpacity>
       )}
     />

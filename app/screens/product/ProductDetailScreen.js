@@ -15,6 +15,9 @@ import { useCartContext, useUserContext } from "../../context/hooks";
 import routes from "../../navigation/routes";
 import { useAirpot, useShop } from "../../api/hooks";
 import ItemPicker from "../../components/input/ItemPicker";
+import MapView from "react-native-maps";
+import { Marker } from "react-native-maps";
+import { launchGoogleMapsNavigation } from "../../utils/helpers";
 
 const ProductDetailScreen = ({ navigation, route }) => {
   const [visible, setVisible] = React.useState(false);
@@ -37,6 +40,7 @@ const ProductDetailScreen = ({ navigation, route }) => {
     preparation_time,
     readily_available,
     type: { name: categry },
+    restaurant: { name: restaurant, longitude, latitude, address },
   } = route.params;
   const imageHeight = Dimensions.get("window").height * 0.4;
   const [currHeroImage, setcurrHeroImage] = useState(image);
@@ -86,6 +90,51 @@ const ProductDetailScreen = ({ navigation, route }) => {
             title="Description"
           />
         </Card>
+        <Card
+          style={{
+            width: "90%",
+            height: 200,
+            alignSelf: "center",
+            overflow: "hidden",
+            margin: 10,
+          }}
+        >
+          <MapView
+            initialRegion={{
+              latitude: parseFloat(latitude),
+              longitude: parseFloat(longitude),
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}
+            style={{ with: "100%", height: "70%" }}
+          >
+            <Marker
+              coordinate={{
+                latitude: parseFloat(latitude),
+                longitude: parseFloat(longitude),
+              }}
+              title={restaurant}
+              style={{ width: 50, height: 50 }}
+            />
+          </MapView>
+          <Card.Actions>
+            <Button
+              onPress={() =>
+                navigation.navigate(
+                  routes.RESTAURANT_DETAIL_SCREEN,
+                  route.params.restaurant
+                )
+              }
+            >
+              View Restaurant detail
+            </Button>
+            <Button
+              onPress={() => launchGoogleMapsNavigation(latitude, longitude)}
+            >
+              View in google map
+            </Button>
+          </Card.Actions>
+        </Card>
       </ScrollView>
       <View style={styles.bottomContainer}>
         <View
@@ -116,24 +165,6 @@ const ProductDetailScreen = ({ navigation, route }) => {
           <Text style={styles.text} variant="headlineLarge">
             Ksh. {parseFloat(price) * quantity}
           </Text>
-          <ItemPicker
-            item={terminal}
-            onItemChanged={setTerminal}
-            label={"Terminal"}
-            data={terminals}
-            valueExtractor={(item) => item.id}
-            labelExtractor={(item) => item.name}
-            renderItem={({ item }) => (
-              <List.Item
-                left={(props) => <List.Icon {...props} icon={"logout"} />}
-                title={item.name}
-                style={{ marginVertical: 5 }}
-              />
-            )}
-            prefixIcon={"logout"}
-            searchable
-            surfixIcon={"chevron-down"}
-          />
           <View style={styles.cart}>
             <Quantorsizer
               value={quantity}
