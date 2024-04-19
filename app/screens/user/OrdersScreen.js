@@ -44,7 +44,6 @@ const OrdersScreen = ({ navigation }) => {
               image,
             },
             quantity,
-
             price,
             status,
             created_at,
@@ -55,7 +54,7 @@ const OrdersScreen = ({ navigation }) => {
             >
               <Card.Title
                 style={styles.orderCard}
-                title={name}
+                title={`${name} | ${status}`}
                 subtitle={`${moment(created_at).format(
                   "Do MMM YYYY, h:mm a"
                 )} | ${quantity} items | @Ksh. ${price}`}

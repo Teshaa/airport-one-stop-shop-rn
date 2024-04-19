@@ -31,6 +31,7 @@ const AccountScreen = ({ navigation }) => {
     show: false,
     phoneNumber: "",
     code: "",
+    loading: false,
   });
   useEffect(() => {
     if (!user) {
@@ -165,13 +166,20 @@ const AccountScreen = ({ navigation }) => {
           />
           <Button
             style={{ marginTop: 10 }}
+            loading={mpesaPrompt.loading}
             mode="contained"
             onPress={async () => {
+              setMpesPropmt({ ...mpesaPrompt, loading: true });
               const response = await makeOrderPayment(token, mpesaPrompt.code, {
                 phoneNumber: mpesaPrompt.phoneNumber,
               });
-              if (response.ok) console.log("Success!");
-              else console.log(response.data);
+              setMpesPropmt({ ...mpesaPrompt, loading: false });
+              if (response.ok) {
+                console.log("Success!");
+                setTimeout(() => {
+                  setMpesPropmt({ ...mpesaPrompt, show: false });
+                }, 3000);
+              } else console.log(response.data);
             }}
           >
             Make payment

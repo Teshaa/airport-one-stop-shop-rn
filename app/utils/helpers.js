@@ -70,3 +70,8 @@ export const launchGoogleMapsNavigation = (latitude, longitude) => {
     .catch(err => console.error('An error occurred launching Google Maps:', err));
 };
 
+
+export const openGoogleMapsDirections = (startLocation, stopLocation) => {
+  const url = `https://www.google.com/maps/dir/?api=1&origin=${startLocation.latitude},${startLocation.longitude}&destination=${stopLocation.latitude},${stopLocation.longitude}`;
+  Linking.openURL(url);
+};

@@ -26,9 +26,15 @@ import moment from "moment/moment";
 import { useAccomodation, useShop } from "../../api/hooks";
 import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
-import { launchGoogleMapsNavigation } from "../../utils/helpers";
+import {
+  launchGoogleMapsNavigation,
+  openGoogleMapsDirections,
+} from "../../utils/helpers";
+import useLocation from "../../hooks/useLocation";
 
 const AccomodationDetail = ({ navigation, route }) => {
+  const location = useLocation();
+
   const [visible, setVisible] = React.useState(false);
   const [snackMessage, setSnackMessage] = React.useState("");
   const onToggleSnackBar = () => setVisible(!visible);
@@ -127,9 +133,17 @@ const AccomodationDetail = ({ navigation, route }) => {
               View Hotel detail
             </Button>
             <Button
-              onPress={() => launchGoogleMapsNavigation(latitude, longitude)}
+              mode="contained"
+              icon="google"
+              disabled={Boolean(location) === false}
+              style={{ marginTop: 5 }}
+              onPress={() => {
+                if (location) {
+                  openGoogleMapsDirections(location, { latitude, longitude });
+                }
+              }}
             >
-              View in google map
+              Open in Google maps
             </Button>
           </Card.Actions>
         </Card>
