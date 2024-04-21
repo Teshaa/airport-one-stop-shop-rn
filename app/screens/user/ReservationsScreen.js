@@ -1,11 +1,12 @@
 import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useUserContext } from "../../context/hooks";
 import { useUser } from "../../api/hooks";
 import { Avatar, Card, Text } from "react-native-paper";
 import moment from "moment/moment";
 import routes from "../../navigation/routes";
 import colors from "../../utils/colors";
+import { useFocusEffect } from "@react-navigation/native";
 
 const ReservationsScreen = ({ navigation }) => {
   const { token } = useUserContext();
@@ -26,9 +27,15 @@ const ReservationsScreen = ({ navigation }) => {
     serReservatons(results);
   };
 
-  useEffect(() => {
-    handleFetch();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      handleFetch();
+    }, [])
+  );
+
+  // useEffect(() => {
+  //   handleFetch();
+  // }, []);
   return (
     <View>
       <FlatList

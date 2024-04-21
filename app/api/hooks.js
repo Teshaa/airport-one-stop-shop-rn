@@ -36,6 +36,10 @@ export const useUser = () => {
     apiClient.post(`meals/orders/${id}/make_payment/`, data, {
       headers: getAuthHeader(token),
     });
+  const makeReservationPayment = (token, id, data) =>
+    apiClient.post(`hotels/reservations/${id}/make_payment/`, data, {
+      headers: getAuthHeader(token),
+    });
   const getReservations = (token, params) =>
     apiClient.get("hotels/reservations/", params, {
       headers: getAuthHeader(token),
@@ -52,6 +56,7 @@ export const useUser = () => {
     getPayments,
     getReservations,
     makeOrderPayment,
+    makeReservationPayment,
   };
 };
 

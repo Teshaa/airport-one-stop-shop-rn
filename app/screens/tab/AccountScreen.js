@@ -92,7 +92,7 @@ const AccountScreen = ({ navigation }) => {
           )}
         />
       </TouchableOpacity>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         onPress={() =>
           navigation.navigate(routes.USER_NAVIGATION, {
             screen: routes.PAYMENTS_SCREEN,
@@ -110,7 +110,7 @@ const AccountScreen = ({ navigation }) => {
             <IconButton {...props} icon="chevron-right" disabled />
           )}
         />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <ScannerWrapper
         onScaned={(scanned) => {
           setMpesPropmt((state) => ({ ...state, show: true, code: scanned }));
