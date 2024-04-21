@@ -1,24 +1,21 @@
-import { FlatList, StyleSheet, View } from "react-native";
-import React from "react";
-import {
-  Avatar,
-  Badge,
-  Button,
-  Card,
-  IconButton,
-  List,
-  Text,
-} from "react-native-paper";
-import colors from "../../utils/colors";
+import { StyleSheet, View, Dimensions, Alert } from "react-native";
+import React, { useState } from "react";
+import { Button, List, Text, TextInput } from "react-native-paper";
 import moment from "moment/moment";
-import Logo from "../../components/Logo";
 import useLocation from "../../hooks/useLocation";
 import { openGoogleMapsDirections } from "../../utils/helpers";
+import { useUser } from "../../api/hooks";
+import { useUserContext } from "../../context/hooks";
+import { Dialog } from "../../components/dialog";
 
 const OrderDetailScreen = ({ navigation, route }) => {
   const location = useLocation();
 
+  const { makeOrderPayment } = useUser();
+  const { token } = useUserContext();
+
   const {
+    id,
     food_item: {
       name,
       type: { name: type },
@@ -30,6 +27,12 @@ const OrderDetailScreen = ({ navigation, route }) => {
     status,
     created_at,
   } = route.params;
+  const [mpesaPrompt, setMpesPropmt] = useState({
+    show: false,
+    phoneNumber: "",
+    code: id,
+    loading: false,
+  });
   return (
     <View>
       <List.Item
@@ -68,12 +71,22 @@ const OrderDetailScreen = ({ navigation, route }) => {
         left={(props) => <List.Icon {...props} icon="office-building-marker" />}
         style={{ backgroundColor: "white", marginVertical: 5 }}
       />
-
+      <Button
+        mode="contained"
+        icon="bank"
+        disabled={status !== "pending"}
+        style={{ margin: 5 }}
+        onPress={() => {
+          setMpesPropmt({ ...mpesaPrompt, show: true });
+        }}
+      >
+        Make payment
+      </Button>
       <Button
         mode="contained"
         icon="google"
         disabled={Boolean(location) === false}
-        style={{ marginTop: 5 }}
+        style={{ margin: 5 }}
         onPress={() => {
           if (location) {
             openGoogleMapsDirections(location, { latitude, longitude });
@@ -82,6 +95,45 @@ const OrderDetailScreen = ({ navigation, route }) => {
       >
         Open Restaurant in Google maps
       </Button>
+      <Dialog
+        visible={mpesaPrompt.show}
+        onRequestClose={() =>
+          setMpesPropmt((state) => ({ ...state, show: false }))
+        }
+      >
+        <View style={{ width: Dimensions.get("screen").width * 0.75 }}>
+          <Text variant="headlineLarge">Mpesa Number</Text>
+          <TextInput
+            value={mpesaPrompt.phoneNumber}
+            label={"Phone number"}
+            placeholder="e.g 0712345678"
+            onChangeText={(value) =>
+              setMpesPropmt((state) => ({ ...state, phoneNumber: value }))
+            }
+          />
+          <Button
+            style={{ marginTop: 10 }}
+            loading={mpesaPrompt.loading}
+            mode="contained"
+            onPress={async () => {
+              setMpesPropmt({ ...mpesaPrompt, loading: true });
+              const response = await makeOrderPayment(token, mpesaPrompt.code, {
+                phoneNumber: mpesaPrompt.phoneNumber,
+              });
+              setMpesPropmt({ ...mpesaPrompt, loading: false });
+              if (response.ok) {
+                console.log("Success!");
+                setTimeout(() => {
+                  setMpesPropmt({ ...mpesaPrompt, show: false });
+                  navigation.goBack();
+                }, 3000);
+              } else console.log(response.data);
+            }}
+          >
+            Make payment
+          </Button>
+        </View>
+      </Dialog>
     </View>
   );
 };

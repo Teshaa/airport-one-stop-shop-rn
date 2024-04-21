@@ -82,7 +82,7 @@ const ProductDetailScreen = ({ navigation, route }) => {
             resizeMode="cover"
           />
           <List.Item
-            title={"Prepairation time"}
+            title={"Preparation time"}
             left={(props) => <List.Icon {...props} icon={"timeline-clock"} />}
             description={
               readily_available
